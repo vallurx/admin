@@ -1,0 +1,9 @@
+.Layout {
+    height: 100vh;
+}
+
+.Content {
+    background-color: white;
+    padding: 20px;
+    overflow: scroll;
+}

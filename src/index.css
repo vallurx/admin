@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-divider-horizontal.ant-divider-with-text {
+  border-top-color: rgba(0, 0, 0, 0.25)!important;
+}
