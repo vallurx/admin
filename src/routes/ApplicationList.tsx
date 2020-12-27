@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const ApplicationList = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { error, loading, applicationList } = useApplicationList();
+    const { loading, applicationList } = useApplicationList();
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);

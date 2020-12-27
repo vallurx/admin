@@ -36,7 +36,7 @@ const LoginWrapper = (props: { children: any }) => {
 
 const NurseWrapper = (props: { children: any }) => {
     const asPath = useRouteMatch();
-    const { user } = useUser();
+    const { user, mutate } = useUser();
 
     const routes = [
         { href: `/`, title: 'Dashboard', icon: <DashboardOutlined /> },
@@ -44,6 +44,12 @@ const NurseWrapper = (props: { children: any }) => {
         { href: `/queue`, title: 'Application Queue', icon: <SafetyCertificateOutlined /> },
         { href: `/vaccines`, title: 'Vaccine Shipments', icon: <ExperimentOutlined /> }
     ];
+
+    const logOut = () => {
+        localStorage.removeItem('session_id');
+        localStorage.removeItem('user_id');
+        mutate();
+    }
 
     return (
         <Layout className={styles.Layout}>
@@ -66,7 +72,7 @@ const NurseWrapper = (props: { children: any }) => {
                 </Menu>
                 <div style={{flex: 1}} />
                 <Menu theme="dark" mode="vertical">
-                    <Menu.Item icon={<LogoutOutlined />}>
+                    <Menu.Item icon={<LogoutOutlined />} onClick={logOut}>
                         Log Out
                     </Menu.Item>
                 </Menu>

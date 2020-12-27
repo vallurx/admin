@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const VaccineShipments = () => {
     const [visible, setVisible] = useState(false);
-    const { vaccines, error, loading, mutate } = useVaccineList();
+    const { vaccines, loading, mutate } = useVaccineList();
 
     const onCreate = () => {
         setVisible(false);

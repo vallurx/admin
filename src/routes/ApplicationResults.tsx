@@ -86,8 +86,8 @@ const ApplicationResults = () => {
                     <Col span={12}>
                         <Form.Item name="dose_size" label="Dose Size" rules={[{ required: true }]}>
                             <Select>
-                                <Select.Option value={0.5}>Half</Select.Option>
-                                <Select.Option value={1}>Full</Select.Option>
+                                <Select.Option value="half">Half</Select.Option>
+                                <Select.Option value="full">Full</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

@@ -4,10 +4,13 @@ import dayjs from 'dayjs';
 import { useScheduleBlocks, useVaccine } from '../lib/data/use-vaccines';
 import { useParams } from 'react-router';
 import { ScheduleBlock } from '../types/vaccine';
+import NewSchedulingBlockModal from '../components/NewSchedulingBlockModal';
 
 const ShipmentSchedule = () => {
     const { id } = useParams<{ id: string }>();
-    const { scheduleBlocks } = useScheduleBlocks(parseInt(id));
+    const [visible, setVisible] = useState(false);
+    const { scheduleBlocks, mutate } = useScheduleBlocks(parseInt(id));
+    const { vaccine } = useVaccine(parseInt(id));
     const [selectedDay, setSelectedDay] = useState(dayjs().valueOf());
 
     const dateCellRenderer = (value: any) => {
@@ -47,9 +50,22 @@ const ShipmentSchedule = () => {
 
     const onDaySelect = (value: any) => setSelectedDay(value.valueOf());
 
+    const onCreateScheduleBlock = () => {
+        setVisible(false);
+        mutate();
+    }
+
     return (
         <>
+            {vaccine && (
+                <NewSchedulingBlockModal onOk={onCreateScheduleBlock} onCancel={() => setVisible(false)} vaccine={vaccine} visible={visible} />
+            )}
+
             <Typography.Title level={2}>Vaccine Schedule</Typography.Title>
+
+            <Divider>
+                <Button type="primary" onClick={() => setVisible(true)}>Create Scheduling Block</Button>
+            </Divider>
 
             <Row gutter={16}>
                 <Col xl={20} md={24}>
@@ -69,10 +85,6 @@ const ShipmentSchedule = () => {
                     </Timeline>
                 </Col>
             </Row>
-
-            <Divider>
-                <Button type="primary">Create Scheduling Block</Button>
-            </Divider>
         </>
     )
 };

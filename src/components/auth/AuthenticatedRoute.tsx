@@ -10,19 +10,19 @@ interface AuthenticatedRouteProps extends RouteProps {
 
 const AuthenticatedRoute = (props: AuthenticatedRouteProps) => {
     const {children, ...rest} = props;
-    const {user, loading} = useUser();
+    const { user, loading, error } = useUser();
 
     const routeRender = useCallback(({location}: any) => {
         if (loading) {
             return <Spin spinning>Loading...</Spin>
         }
 
-        return user ? (
+        return user && !error ? (
             children
         ) : (
             <Redirect to={{pathname: '/login', state: {from: location}}}/>);
         },
-        [user, children, loading]
+        [user, children, loading, error]
     );
 
     return <Route {...rest} render={routeRender}/>;

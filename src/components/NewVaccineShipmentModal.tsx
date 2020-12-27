@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, InputNumber, Modal, Select } from 'antd';
+import { Form, Input, InputNumber, Modal, notification, Select } from 'antd';
 import { axios } from '../lib/axios';
 
 interface NewVaccineShipmentModalProps {
@@ -28,7 +28,10 @@ const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
             setLoading(false);
             onOk();
         } catch (e) {
-            console.error(e);
+            notification.error({
+                message: 'Un oh!',
+                description: 'There was an error creating a shipment. Please contact VallurX.'
+            });
         }
     }
 

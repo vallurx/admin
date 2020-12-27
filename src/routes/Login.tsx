@@ -20,8 +20,11 @@ const Login = () => {
     const history = useHistory();
     const { mutate } = useUser();
     const [error, setError] = useState<ErrorTypes | undefined>();
+    const [loading, setLoading] = useState(false);
 
     const onSubmitForm = async (data: LoginForm) => {
+        setLoading(true);
+
         try {
             const loginResponse = await axios.post<LoginResponse>('/api/login', data);
             const { id, session_id } = loginResponse.data;
@@ -31,9 +34,11 @@ const Login = () => {
 
             await mutate();
 
+            setLoading(false);
             history.push('/');
         } catch (e) {
             setError(e.response.data.error);
+            setLoading(false);
         }
     };
 
@@ -73,7 +78,7 @@ const Login = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">Login</Button>
+                        <Button type="primary" htmlType="submit" loading={loading}>Login</Button>
                     </Form.Item>
                 </Form>
             </Card>

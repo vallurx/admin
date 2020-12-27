@@ -33,7 +33,7 @@ const ApplicationQueue = () => {
         }
 
         try {
-            await axios.post(`/api/facilities/1/approval/${application?.id}`, {
+            await axios.post(`/api/facilities/1/application/${application?.id}`, {
                 status: appStatus,
                 notes: appNotes
             });
@@ -48,7 +48,10 @@ const ApplicationQueue = () => {
 
             await mutateList();
         } catch (e) {
-            console.error(e);
+            notification.error({
+                message: 'Un oh!',
+                description: 'There was an error reviewing this application. Please contact VallurX.'
+            });
         }
     }
 

@@ -23,7 +23,7 @@ const store = configureStore({
 
 ReactDOM.render(
     <Provider store={store}>
-        <SWRConfig value={{fetcher: fetcher}}>
+        <SWRConfig value={{fetcher: fetcher, shouldRetryOnError: false, revalidateOnFocus: false}}>
             <App/>
         </SWRConfig>
     </Provider>,
