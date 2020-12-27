@@ -29,7 +29,7 @@ const VaccineShipments = () => {
                 renderItem={(item: VaccineBatch) => (
                     <List.Item>
                         <Card title={item.name} extra={
-                            <Link to={'/vaccines/:id/schedule'}>
+                            <Link to={`/vaccines/${item.id}/schedule`}>
                                 <Button type="primary">Schedule</Button>
                             </Link>
                         }>

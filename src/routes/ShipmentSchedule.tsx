@@ -7,7 +7,6 @@ import { ScheduleBlock } from '../types/vaccine';
 
 const ShipmentSchedule = () => {
     const { id } = useParams<{ id: string }>();
-    const { vaccine } = useVaccine(parseInt(id));
     const { scheduleBlocks } = useScheduleBlocks(parseInt(id));
     const [selectedDay, setSelectedDay] = useState(dayjs().valueOf());
 
@@ -41,7 +40,7 @@ const ShipmentSchedule = () => {
             const end = dayjs(blocks[blocks.length - 1].end_at).format('LT');
 
             return (
-                <><Tag>{start} to {end}</Tag></>
+                <Tag key={blocks[0].id}>{start} to {end}</Tag>
             )
         })
     };

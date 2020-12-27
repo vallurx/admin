@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://73.222.115.200:9095",
+  "homepage": "https://clark.vallurx.com/admin",
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@reduxjs/toolkit": "^1.5.0",
