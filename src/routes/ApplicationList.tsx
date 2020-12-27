@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { ApprovalListItem } from '../types';
+import { ApplicationListItem } from '../types';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { Button, Table, Typography } from 'antd';
-import { useApprovalList } from '../lib/data/use-approval';
+import { useApplicationList } from '../lib/data/use-application';
+import { Link } from 'react-router-dom';
 
-const ApprovalList = () => {
+const ApplicationList = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const { error, loading, approvalList } = useApprovalList();
+    const { error, loading, applicationList } = useApplicationList();
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
     }
 
-    const columns: ColumnsType<ApprovalListItem> = [
+    const columns: ColumnsType<ApplicationListItem> = [
         {
             title: 'Full Name',
             render: (value, record) => {
@@ -35,14 +36,18 @@ const ApprovalList = () => {
         {
             title: 'Requested At',
             render: (value, record) => {
-                return dayjs(record.created_at).utc(true).local().format('LLL')
+                return dayjs(record.created_at).format('LLL')
             },
             key: 'requestedAt'
         },
         {
             title: 'Actions',
             render: (value, record) => {
-                return <Button type="link">Review</Button>
+                return (
+                    <Link to={'/applications/' + record.id}>
+                        <Button type="primary">View Application</Button>
+                    </Link>
+                )
             },
             key: 'actions'
         }
@@ -54,11 +59,11 @@ const ApprovalList = () => {
 
             <Table
                 columns={columns}
-                dataSource={approvalList?.items}
+                dataSource={applicationList?.items}
                 pagination={{
                     pageSize: 10,
                     current: currentPage,
-                    total: approvalList?.total,
+                    total: applicationList?.total,
                     onChange: onPageChange
                 }}
                 rowKey="id"
@@ -68,4 +73,4 @@ const ApprovalList = () => {
     );
 };
 
-export default ApprovalList;
+export default ApplicationList;

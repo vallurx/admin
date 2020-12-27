@@ -2,11 +2,11 @@ import React from 'react';
 import { Button, Col, Row, Spin, Statistic, Typography } from 'antd';
 import useUser from '../lib/data/use-user';
 import { Link } from 'react-router-dom';
-import { useApprovalList } from '../lib/data/use-approval';
+import { useApplicationList } from '../lib/data/use-application';
 
 const NurseDashboard = () => {
     const { user, loading } = useUser();
-    const { approvalList } = useApprovalList();
+    const { applicationList } = useApplicationList();
 
     return (
         <Spin spinning={loading}>
@@ -17,10 +17,10 @@ const NurseDashboard = () => {
                     <Statistic title="Vaccine Doses" value={10000} />
                 </Col>
                 <Col span={12}>
-                    <Statistic title="Pending Applications" value={approvalList?.total} />
+                    <Statistic title="Pending Applications" value={applicationList?.total} />
                     <Link to="/queue">
-                        <Button type="primary" disabled={approvalList?.total === 0}>
-                            {approvalList?.total === 0 ? 'Queue Empty!' : 'Enter Queue'}
+                        <Button type="primary" disabled={applicationList?.total === 0}>
+                            {applicationList?.total === 0 ? 'Queue Empty!' : 'Enter Queue'}
                         </Button>
                     </Link>
                 </Col>
