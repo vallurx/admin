@@ -31,7 +31,7 @@ const Login = () => {
 
             await mutate();
 
-            history.push('/nurse-dashboard');
+            history.push('/');
         } catch (e) {
             setError(e.response.data.error);
         }
