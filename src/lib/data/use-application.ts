@@ -1,8 +1,19 @@
 import useSWR from 'swr';
 import { Application, ApplicationListResults } from '../../types';
 
-const useApplicationList = (currentPage = 1, count = 10) => {
-    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/application?skip=${(currentPage - 1) * count}&count=${count}`);
+interface AppFilters {
+    status: string;
+    name: string;
+}
+
+const defaultFilters = {
+    status: '',
+    name: ''
+}
+
+const useApplicationList = (currentPage = 1, count = 10, filters: AppFilters = defaultFilters) => {
+    const filterStr = `skip=${(currentPage - 1) * count}&count=${count}&status=${filters.status || '*'}&filter_name=${filters.name || ''}`;
+    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/application?${filterStr}`);
 
     return {
         applicationList: data,

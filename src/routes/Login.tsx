@@ -1,10 +1,11 @@
 import React, { CSSProperties, useState } from 'react';
-import { Alert, Button, Card, Form, Input, Typography } from 'antd';
+import { Alert, Button, Card, Form, Input } from 'antd';
 import axios from 'axios';
 import { LoginResponse } from '../types';
 import { useHistory } from 'react-router';
 import { ErrorTypes, getError } from '../lib/error-lookup';
 import useUser from '../lib/data/use-user';
+import logo from '../assets/VallurX Logo Light Transparent.png';
 
 interface LoginForm {
     email: string;
@@ -54,7 +55,9 @@ const Login = () => {
             )}
 
             <Card>
-                <Typography.Title>VallurX Login</Typography.Title>
+                <div>
+                    <img alt="Logo" src={logo} className="logo" />
+                </div>
 
                 <Form
                     name="login"

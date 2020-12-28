@@ -42,6 +42,17 @@ export interface Application {
     created_at: number,
     employer: string,
     status: string,
+    suffix: string,
+    insurance_name: string,
+    insurance_holder_name: string,
+    insurance_holder_relationship: string,
+    insurance_policy: string,
+    insurance_group: string,
+    insurance_phone: string,
+    insurance_address_street: string,
+    insurance_address_city: string,
+    insurance_address_state: string,
+    insurance_address_zip: string,
     notes: string,
 }
 

@@ -20,3 +20,12 @@ code {
   display: flex;
   flex-direction: column;
 }
+
+.logo {
+  text-align: center;
+  user-select: none;
+  margin: auto;
+  display: block;
+  width: 30%;
+  -webkit-user-drag: none;
+}

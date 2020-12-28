@@ -22,6 +22,9 @@ const VaccineApplicationUI = (props: VaccineApplicationUIProps) => {
                 <Descriptions.Item label="Last Name">
                     {application.last_name}
                 </Descriptions.Item>
+                <Descriptions.Item label="Suffix">
+                    {application.suffix}
+                </Descriptions.Item>
                 <Descriptions.Item label="Sex">
                     {application.sex}
                 </Descriptions.Item>
@@ -60,6 +63,33 @@ const VaccineApplicationUI = (props: VaccineApplicationUIProps) => {
                 <Descriptions.Item label="Address">
                     {application.address_street}<br />
                     {application.address_city}, {application.address_state} {application.address_zip}
+                </Descriptions.Item>
+            </Descriptions>
+
+            <br />
+
+            <Descriptions title="Insurance Information" bordered column={{ xxl: 3, xl: 3, lg: 2, md: 1, sm: 2, xs: 1 }}>
+                <Descriptions.Item label="Insurance Name">
+                    {application.insurance_name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Insurance Holder Name">
+                    {application.insurance_holder_name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Insurance Holder Relationship">
+                    {application.insurance_holder_relationship}
+                </Descriptions.Item>
+                <Descriptions.Item label="Insurance Policy">
+                    {application.insurance_policy}
+                </Descriptions.Item>
+                <Descriptions.Item label="Insurance Group">
+                    {application.insurance_group}
+                </Descriptions.Item>
+                <Descriptions.Item label="Insurance Phone">
+                    {application.insurance_phone}
+                </Descriptions.Item>
+                <Descriptions.Item label="Insurance Address">
+                    {application.insurance_address_street}<br />
+                    {application.insurance_address_city}, {application.insurance_address_state} {application.insurance_address_zip}
                 </Descriptions.Item>
             </Descriptions>
 
