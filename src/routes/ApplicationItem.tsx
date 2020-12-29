@@ -120,7 +120,7 @@ const ApplicationItem = () => {
         <>
             <Typography.Title>Application Review</Typography.Title>
 
-            <VaccineApplicationUI application={application} />
+            <VaccineApplicationUI application={application} editable onEdit={mutate} />
 
             <br />
 

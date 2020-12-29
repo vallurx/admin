@@ -12,6 +12,7 @@ interface NewVaccineShipment {
     name: string;
     vaccine_count: number;
     manufacturer: string;
+    lot_number: string;
 }
 
 const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
@@ -29,7 +30,7 @@ const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
             onOk();
         } catch (e) {
             notification.error({
-                message: 'Un oh!',
+                message: 'Uh oh!',
                 description: 'There was an error creating a shipment. Please contact VallurX.'
             });
         }
@@ -53,6 +54,10 @@ const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
                 </Form.Item>
 
                 <Form.Item name="vaccine_count" label="Number of Vaccines" rules={[{ required: true }]}>
+                    <InputNumber min={1} />
+                </Form.Item>
+
+                <Form.Item name="lot_number" label="Lot Number" rules={[{ required: true }]}>
                     <InputNumber min={1} />
                 </Form.Item>
 

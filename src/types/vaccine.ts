@@ -6,6 +6,7 @@ export interface VaccineBatch {
     vaccine_count: number,
     manufacturer: keyof typeof manufacturers,
     facility_id: number,
+    lot_number: string,
     name: string,
 }
 

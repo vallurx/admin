@@ -23,31 +23,11 @@ const ApplicationResults = () => {
             <Form
                 layout="vertical"
                 initialValues={{
-                    dose_size: 1
+                    dose_size: 'full'
                 }}
             >
                 <Row gutter={8}>
                     <Col span={8}>
-                        <Form.Item name="cvx_vaccine_code" label="CVX Vaccine Code" rules={[{ required: true }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={8}>
-                        <Form.Item name="cpt_vaccine_code" label="CPT Vaccine Code" rules={[{ required: true }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={8}>
-                        <Form.Item name="lot_number" label="Lot Number" rules={[{ required: true }]}>
-                            <Input />
-                        </Form.Item>
-                    </Col>
-                </Row>
-
-                <Row gutter={8}>
-                    <Col span={12}>
                         <Form.Item name="anatomical_route" label="Anatomical Route" rules={[{ required: true }]}>
                             <Select>
                                 <Select.Option value="ID">Intradermal</Select.Option>
@@ -62,7 +42,7 @@ const ApplicationResults = () => {
                         </Form.Item>
                     </Col>
 
-                    <Col span={12}>
+                    <Col span={8}>
                         <Form.Item name="anatomical_site" label="Anatomical Site" rules={[{ required: true }]}>
                             <Select>
                                 <Select.Option value="LA">Left Arm</Select.Option>
@@ -80,23 +60,12 @@ const ApplicationResults = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-                </Row>
 
-                <Row gutter={8}>
-                    <Col span={12}>
+                    <Col span={8}>
                         <Form.Item name="dose_size" label="Dose Size" rules={[{ required: true }]}>
                             <Select>
                                 <Select.Option value="half">Half</Select.Option>
                                 <Select.Option value="full">Full</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </Col>
-
-                    <Col span={12}>
-                        <Form.Item name="manufacturer" label="Manufacturer" rules={[{ required: true }]}>
-                            <Select>
-                                <Select.Option value="MOD">Moderna</Select.Option>
-                                <Select.Option value="PFR">Pfizer</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

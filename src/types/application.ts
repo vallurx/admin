@@ -6,6 +6,7 @@ export interface ApplicationListItem {
     last_name: string;
     date_of_birth: string;
     employer: string;
+    status: string;
 }
 
 export interface ApplicationListResults {
@@ -38,7 +39,12 @@ export interface Application {
     signature_print: string,
     signature_relationship: string,
     target_populations: string,
-    screening_questions: [number, boolean | null][] | null,
+    screening_questions: {
+        id: number;
+        question: string;
+        answer: boolean;
+        details?: string;
+    }[] | null,
     created_at: number,
     employer: string,
     status: string,
