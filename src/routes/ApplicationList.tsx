@@ -73,7 +73,7 @@ const ApplicationList = () => {
             key: 'employer'
         },
         {
-            title: 'Requested At',
+            title: 'Requested On',
             render: (value, record) => {
                 return dayjs(record.created_at).format('LLL')
             },
