@@ -11,9 +11,11 @@ const ApplicationList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('');
     const [nameFilter, setNameFilter] = useState('');
+    const [dobFilter, setDOBFilter] = useState('');
     const { loading, applicationList } = useApplicationList(currentPage, 10, {
         status: statusFilter,
-        name: nameFilter
+        name: nameFilter,
+        dob: dobFilter,
     });
 
     const onPageChange = (page: number) => {
@@ -23,6 +25,7 @@ const ApplicationList = () => {
     const handleTableChange = (pagination: any, filters: any) => {
         setStatusFilter(filters.status ? filters.status.join(',') : '');
         setNameFilter(filters.name || '');
+        setDOBFilter(filters.dob || '');
     };
 
     const columns: ColumnsType<ApplicationListItem> = [
@@ -33,19 +36,21 @@ const ApplicationList = () => {
                 return `${record.first_name}${mi}${record.last_name}`;
             },
             key: 'full_name',
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+                let value = (selectedKeys[0] as string)?.trim() || '';
+                return (
                 <div style={{ padding: 8 }}>
                     <Input
                         placeholder={`Search Name`}
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                        onPressEnter={() => setNameFilter(selectedKeys[0] as string)}
+                        onPressEnter={() => (value.length > 0 ? confirm() : clearFilters && clearFilters(), setNameFilter(value))}
                         style={{ width: 188, marginBottom: 8, display: 'block' }}
                     />
                     <Space>
                         <Button
                             type="primary"
-                            onClick={() => setNameFilter(selectedKeys[0] as string)}
+                            onClick={() => (value.length > 0 ? confirm() : clearFilters && clearFilters(), setNameFilter(value))}
                             icon={<SearchOutlined />}
                             size="small"
                             style={{ width: 90 }}
@@ -59,13 +64,45 @@ const ApplicationList = () => {
                             Reset
                         </Button>
                     </Space>
-                </div>
-            )
+                </div>);
+            },
+            filtered: nameFilter.length > 0,
         },
         {
             title: 'Date of Birth',
             dataIndex: 'date_of_birth',
-            key: 'date_of_birth'
+            key: 'date_of_birth',
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+                let value = (selectedKeys[0] as string)?.trim() || '';
+                return (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder={`MM/DD/YYYY`}
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => (value.length > 0 ? confirm() : clearFilters && clearFilters(), setDOBFilter(value))}
+                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button
+                            type="primary"
+                            onClick={() => (value.length > 0 ? confirm() : clearFilters && clearFilters(), setDOBFilter(value))}
+                            icon={<SearchOutlined />}
+                            size="small"
+                            style={{ width: 90 }}
+                        >
+                            Search
+                        </Button>
+                        <Button onClick={() => {
+                            setDOBFilter('');
+                            clearFilters && clearFilters();
+                        }} size="small" style={{ width: 90 }}>
+                            Reset
+                        </Button>
+                    </Space>
+                </div>);
+            },
+            filtered: dobFilter.length > 0,
         },
         {
             title: 'Employer',
@@ -84,24 +121,22 @@ const ApplicationList = () => {
             dataIndex: 'status',
             key: 'status',
             filters: [
-                { text: 'Awaiting Approval', value: 'AwaitingApproval' },
-                { text: 'Scheduling', value: 'Scheduling' },
                 { text: 'Scheduled', value: 'Scheduled' },
-                { text: 'Vaccinated', value: 'Vaccinated' }
+                { text: 'Information Needed', value: 'InformationNeeded' },
+                { text: 'Scheduling', value: 'Scheduling' },
+                { text: 'Awaiting Approval', value: 'AwaitingApproval' },
+                { text: 'Vaccinated', value: 'Vaccinated' },
+                { text: 'Rejected', value: 'Rejected' },
             ]
         },
         {
             title: 'Actions',
             render: (value, record) => {
-                return (record.status === 'Scheduled' || record.status === 'Vaccinated') ? (
-                    <Link to={'/applications/' + record.id + '/results'}>
-                        <Button type="primary">View Results</Button>
-                    </Link>
-                ) : (
-                    <Link to={'/applications/' + record.id}>
-                        <Button type="primary">View Application</Button>
-                    </Link>
-                )
+                return (
+                <Link to={'/applications/' + record.id}>
+                    <Button type="primary">View Application</Button>
+                </Link>
+                );
             },
             key: 'actions'
         }

@@ -29,3 +29,8 @@ code {
   width: 30%;
   -webkit-user-drag: none;
 }
+
+.imageModalWrap {
+  display: flex;
+  justify-content: center;
+}

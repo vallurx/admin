@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Application } from '../types';
-import { Button, Descriptions, Divider } from 'antd';
+import { Button, Descriptions, Divider, Tabs } from 'antd';
 import { getAnswerToQuestion } from '../lib/screening-questions';
 import EditApplicationModal from './EditApplicationModal';
+import WorkIDModal from './WorkIDModal';
 
 interface VaccineApplicationUIProps {
     application: Application;
@@ -13,7 +14,8 @@ interface VaccineApplicationUIProps {
 const VaccineApplicationUI = (props: VaccineApplicationUIProps) => {
     const { application, onEdit, editable } = props;
     const [visible, setVisible] = useState(false);
-
+    const [idVisible, setIdVisible] = useState(false);
+    
     const onFinish = () => {
         setVisible(false);
 
@@ -25,6 +27,7 @@ const VaccineApplicationUI = (props: VaccineApplicationUIProps) => {
     return (
         <>
             <EditApplicationModal visible={visible} application={application} onOk={onFinish} onCancel={onFinish} />
+            <WorkIDModal visible={idVisible} onFinish={() => setIdVisible(false)} image={application.work_id_image_url || ''} />
 
             {editable && (
                 <Button type="primary" onClick={() => setVisible(true)}>
@@ -65,8 +68,11 @@ const VaccineApplicationUI = (props: VaccineApplicationUIProps) => {
                 <Descriptions.Item label="Target Population">
                     {application.target_populations}
                 </Descriptions.Item>
+                <Descriptions.Item label="Work ID">
+                    {application.work_id_image_url == null || application.work_id_image_url.length == 0 ? 'No Work ID' : <Button type="primary" onClick={() => setIdVisible(true)} >Work ID</Button> }
+                </Descriptions.Item>
             </Descriptions>
-
+            
             <br />
 
             <Descriptions title="Contact Information" bordered column={{ xxl: 3, xl: 3, lg: 2, md: 1, sm: 2, xs: 1 }}>

@@ -14,6 +14,8 @@ export interface ApplicationListResults {
     total: number;
 }
 
+export type AppStatus = 'Scheduling' | 'Scheduled' | 'Rejected' | 'AwaitingApproval' | 'InformationNeeded' | 'Vaccinated';
+
 export interface Application {
     id: number,
     facility_id: number,
@@ -60,14 +62,12 @@ export interface Application {
     insurance_address_state: string,
     insurance_address_zip: string,
     notes: string,
+    work_id_image_url?: string,
 }
 
 
 
 export interface ApplicationResult {
-    cvx_vaccine_code: string;
-    cpt_vaccine_code: string;
-    lot_number: string;
     /*
         Intradermal = ID
         Intramuscular = IM
@@ -95,6 +95,5 @@ export interface ApplicationResult {
      */
     anatomical_site: string;
     dose_size: string;
-    manufacturer: string;
     notes: string;
 }

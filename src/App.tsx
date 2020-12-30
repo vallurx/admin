@@ -13,7 +13,6 @@ import ApplicationQueue from './routes/ApplicationQueue';
 import logo from './assets/VallurX Logo Dark Transparent.png';
 import VaccineShipments from './routes/VaccineShipments';
 import ApplicationItem from './routes/ApplicationItem';
-import ApplicationResults from './routes/ApplicationResults';
 import ShipmentSchedule from './routes/ShipmentSchedule';
 import InviteUserModal from './components/InviteUserModal';
 import RegisterUser from './routes/RegisterUser';
@@ -142,12 +141,6 @@ const App = () => {
                     <AuthenticatedRoute path="/applications/:id" exact>
                         <NurseWrapper>
                             <ApplicationItem />
-                        </NurseWrapper>
-                    </AuthenticatedRoute>
-
-                    <AuthenticatedRoute path="/applications/:id/results" exact>
-                        <NurseWrapper>
-                            <ApplicationResults />
                         </NurseWrapper>
                     </AuthenticatedRoute>
 

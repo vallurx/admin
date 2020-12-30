@@ -4,15 +4,17 @@ import { Application, ApplicationListResults } from '../../types';
 interface AppFilters {
     status: string;
     name: string;
+    dob: string;
 }
 
 const defaultFilters = {
     status: '',
-    name: ''
+    name: '',
+    dob: '',
 }
 
 const useApplicationList = (currentPage = 1, count = 10, filters: AppFilters = defaultFilters) => {
-    const filterStr = `skip=${(currentPage - 1) * count}&count=${count}&status=${filters.status || '*'}&filter_name=${filters.name || ''}`;
+    const filterStr = `skip=${(currentPage - 1) * count}&count=${count}&status=${filters.status || '*'}${filters.name.length > 0 ? `&filter_name=${filters.name}` : ''}${filters.dob.length > 0 ? `&filter_dob=${filters.dob}` : ''}`;
     const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/application?${filterStr}`);
 
     return {
