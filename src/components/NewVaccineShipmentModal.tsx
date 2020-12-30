@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, InputNumber, Modal, notification, Select } from 'antd';
 import { axios } from '../lib/axios';
+import { useVaccineList } from '../lib/data/use-vaccines';
 
 interface NewVaccineShipmentModalProps {
     visible: boolean;
@@ -17,6 +18,7 @@ interface NewVaccineShipment {
 
 const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
     const { visible, onOk, onCancel } = props;
+    const { vaccines } = useVaccineList();
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -63,8 +65,9 @@ const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
 
                 <Form.Item name="manufacturer" label="Vaccine Manufacturer" rules={[{ required: true }]}>
                     <Select>
-                        <Select.Option value="MOD">Moderna</Select.Option>
-                        <Select.Option value="PFR">Pfizer</Select.Option>
+                        {vaccines?.map(v => (
+                            <Select.Option value={v.id}>{v.shorthand}</Select.Option>
+                        ))}
                     </Select>
                 </Form.Item>
             </Form>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Calendar, Col, Divider, Row, Tag, Timeline, Typography } from 'antd';
 import dayjs from 'dayjs';
-import { useScheduleBlocks, useVaccine } from '../lib/data/use-vaccines';
+import { useScheduleBlocks, useVaccineShipment } from '../lib/data/use-vaccines';
 import { useParams } from 'react-router';
 import { ScheduleBlock } from '../types/vaccine';
 import NewSchedulingBlockModal from '../components/NewSchedulingBlockModal';
@@ -10,7 +10,7 @@ const ShipmentSchedule = () => {
     const { id } = useParams<{ id: string }>();
     const [visible, setVisible] = useState(false);
     const { scheduleBlocks, mutate } = useScheduleBlocks(parseInt(id));
-    const { vaccine } = useVaccine(parseInt(id));
+    const { vaccineShipment } = useVaccineShipment(parseInt(id));
     const [selectedDay, setSelectedDay] = useState(dayjs().valueOf());
 
     const dateCellRenderer = (value: any) => {
@@ -57,8 +57,8 @@ const ShipmentSchedule = () => {
 
     return (
         <>
-            {vaccine && (
-                <NewSchedulingBlockModal onOk={onCreateScheduleBlock} onCancel={() => setVisible(false)} vaccine={vaccine} visible={visible} />
+            {vaccineShipment && (
+                <NewSchedulingBlockModal onOk={onCreateScheduleBlock} onCancel={() => setVisible(false)} vaccine={vaccineShipment} visible={visible} />
             )}
 
             <Typography.Title level={2}>Vaccine Schedule</Typography.Title>

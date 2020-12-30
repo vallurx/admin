@@ -1,8 +1,8 @@
 import useSWR from 'swr';
-import { ScheduleBlock, VaccineBatch } from '../../types/vaccine';
+import { ScheduleBlock, Vaccine, VaccineBatch } from '../../types/vaccine';
 
 const useVaccineList = () => {
-    const { data, error, mutate } = useSWR<VaccineBatch[]>(`/api/facilities/1/vaccine_shipments`);
+    const { data, error, mutate } = useSWR<Vaccine[]>(`/api/vaccines`);
 
     return {
         vaccines: data,
@@ -12,11 +12,22 @@ const useVaccineList = () => {
     };
 };
 
-const useVaccine = (batchId: number) => {
+const useVaccineShipmentList = () => {
+    const { data, error, mutate } = useSWR<VaccineBatch[]>(`/api/facilities/1/vaccine_shipments`);
+
+    return {
+        vaccineShipments: data,
+        error,
+        mutate,
+        loading: !data && !error
+    };
+};
+
+const useVaccineShipment = (batchId: number) => {
     const { data, error, mutate } = useSWR<VaccineBatch>(`/api/facilities/1/vaccine_shipments/${batchId}`);
 
     return {
-        vaccine: data,
+        vaccineShipment: data,
         error,
         mutate,
         loading: !data && !error
@@ -34,4 +45,4 @@ const useScheduleBlocks = (batchId: number) => {
     };
 }
 
-export { useVaccineList, useVaccine, useScheduleBlocks };
+export { useVaccineList, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks };

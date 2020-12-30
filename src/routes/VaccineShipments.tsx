@@ -1,6 +1,6 @@
 import { Button, Card, Descriptions, Divider, List, Typography } from 'antd';
 import React, { useState } from 'react';
-import { useVaccineList } from '../lib/data/use-vaccines';
+import { useVaccineShipmentList } from '../lib/data/use-vaccines';
 import NewVaccineShipmentModal from '../components/NewVaccineShipmentModal';
 import { VaccineBatch } from '../types/vaccine';
 import { manufacturers } from '../lib/manufacturers';
@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const VaccineShipments = () => {
     const [visible, setVisible] = useState(false);
-    const { vaccines, loading, mutate } = useVaccineList();
+    const { vaccineShipments, loading, mutate } = useVaccineShipmentList();
 
     const onCreate = () => {
         setVisible(false);
@@ -24,7 +24,7 @@ const VaccineShipments = () => {
 
             <List
                 grid={{ gutter: 16, xxl: 3, xl: 3, lg: 2, md: 1, sm: 2, xs: 1 }}
-                dataSource={vaccines}
+                dataSource={vaccineShipments}
                 loading={loading}
                 renderItem={(item: VaccineBatch) => (
                     <List.Item>
@@ -38,7 +38,7 @@ const VaccineShipments = () => {
                                     {item.vaccine_count}
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Manufacturer">
-                                    {manufacturers[item.manufacturer]}
+                                    Test
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Shipment Created">
                                     {dayjs(item.created_at).utc(true).local().format('LLL')}

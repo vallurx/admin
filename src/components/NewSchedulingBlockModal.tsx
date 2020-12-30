@@ -3,7 +3,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import { VaccineBatch } from '../types/vaccine';
 import { DatePicker } from './dayjs';
 import { Col, Divider, Input, Modal, notification, Row, Space, Tag, Typography } from 'antd';
-import { manufacturers } from '../lib/manufacturers';
 import { axios } from '../lib/axios';
 
 interface NewSchedulingBlockModalProps {
@@ -125,7 +124,7 @@ const NewSchedulingBlockModal = (props: NewSchedulingBlockModalProps) => {
                 {date}
             </Typography.Title>
 
-            <div><Divider>{vaccine.vaccine_count} doses from {manufacturers[vaccine.manufacturer]}</Divider></div>
+            <div><Divider>{vaccine.vaccine_count} doses</Divider></div>
 
             <Row gutter={4} wrap>
                 {times.map(time => (
