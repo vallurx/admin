@@ -10,30 +10,26 @@ interface NewSchedulingBlockModalProps {
     onCancel: () => void;
     vaccine: VaccineBatch;
     visible: boolean;
+    activeDate: Dayjs;
 }
 
 // TODO: Clear fields on cancel
 const NewSchedulingBlockModal = (props: NewSchedulingBlockModalProps) => {
-    const { onOk, onCancel, vaccine, visible } = props;
-    const [date, setDate] = useState<string>();
+    const { onOk, onCancel, vaccine, visible, activeDate } = props;
     const [times, setTimes] = useState<Dayjs[]>([]);
     const [selectedTimes, setSelectedTimes] = useState<number[]>([]);
     const [slots, setSlots] = useState(10);
-
-    const onDatePick = (date: Dayjs | null, dateString: string) => {
-        setDate(dateString);
-    };
 
     const onTimePick = (times: any, timeStrings: [string, string]) => {
         if (!timeStrings[0] || !timeStrings[1]) {
             return;
         }
 
-        const time1 = dayjs(`${date} ${timeStrings[0]}`);
-        const time2 = dayjs(`${date} ${timeStrings[1]}`);
+        const time1 = dayjs(`${activeDate.format('L')} ${timeStrings[0]}`);
+        const time2 = dayjs(`${activeDate.format('L')} ${timeStrings[1]}`);
         const timesArr = [];
 
-        for (let i = time1.valueOf(); i <= time2.valueOf(); i += (15 * 60 * 1000)) {
+        for (let i = time1.valueOf(); i < time2.valueOf(); i += (15 * 60 * 1000)) {
             timesArr.push(dayjs(i));
         }
 
@@ -50,8 +46,6 @@ const NewSchedulingBlockModal = (props: NewSchedulingBlockModalProps) => {
     }
 
     const createBatchSchedules = async () => {
-        console.log(slots);
-
         if (!slots || slots < 1) {
             notification.error({
                 message: 'Oops!',
@@ -76,7 +70,6 @@ const NewSchedulingBlockModal = (props: NewSchedulingBlockModalProps) => {
     }
 
     const cancelHandler = () => {
-        setDate(undefined);
         setTimes([]);
         setSelectedTimes([]);
         setSlots(10);
@@ -91,13 +84,12 @@ const NewSchedulingBlockModal = (props: NewSchedulingBlockModalProps) => {
             onCancel={cancelHandler}
         >
             <Space direction="vertical" style={{width: '100%'}}>
-                <DatePicker onChange={onDatePick} style={{width: '100%'}} />
+                <DatePicker value={activeDate} style={{width: '100%'}} disabled />
 
                 <DatePicker.RangePicker
                     use12Hours
                     format="h:mm a"
                     minuteStep={15}
-                    disabled={!date}
                     picker="time"
                     onChange={onTimePick}
                     style={{width: '100%'}}
@@ -116,12 +108,12 @@ const NewSchedulingBlockModal = (props: NewSchedulingBlockModalProps) => {
 
             <div><Divider>Schedule Block for</Divider></div>
 
-            {!date && (
+            {!activeDate && (
                 <Typography.Title level={2} style={{textAlign: 'center'}}>Select date to get started</Typography.Title>
             )}
 
             <Typography.Title level={2} style={{textAlign: 'center'}}>
-                {date}
+                {activeDate.format('LL')}
             </Typography.Title>
 
             <div><Divider>{vaccine.vaccine_count} doses</Divider></div>

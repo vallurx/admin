@@ -1,91 +1,125 @@
-import React, { useState } from 'react';
-import { Button, Calendar, Col, Divider, Row, Tag, Timeline, Typography } from 'antd';
+import React, { CSSProperties, useState } from 'react';
+import { Button, Card, Skeleton, Space, Typography } from 'antd';
+import { FastBackwardOutlined, FastForwardOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import TimeCalendar from '../components/TimeCalendar';
 import { useScheduleBlocks, useVaccineShipment } from '../lib/data/use-vaccines';
 import { useParams } from 'react-router';
-import { ScheduleBlock } from '../types/vaccine';
 import NewSchedulingBlockModal from '../components/NewSchedulingBlockModal';
+
+const weekGrid: CSSProperties = {
+    display: 'flex',
+    marginTop: 20
+};
+
+const dateCard: CSSProperties = {
+    cursor: 'pointer',
+    flex: 1,
+    margin: 5
+};
+
+const activeCard: CSSProperties = {
+    cursor: 'pointer',
+    flex: 1,
+    margin: 5,
+    backgroundColor: '#EEE'
+};
 
 const ShipmentSchedule = () => {
     const { id } = useParams<{ id: string }>();
-    const [visible, setVisible] = useState(false);
     const { scheduleBlocks, mutate } = useScheduleBlocks(parseInt(id));
     const { vaccineShipment } = useVaccineShipment(parseInt(id));
-    const [selectedDay, setSelectedDay] = useState(dayjs().valueOf());
+    const [visible, setVisible] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(dayjs());
 
-    const dateCellRenderer = (value: any) => {
-        if (!scheduleBlocks) {
-            return null;
-        }
-
-        const blocksInDay = scheduleBlocks.filter(b => dayjs(value.valueOf()).isSame(dayjs(b.start_at), 'day'));
-        const compactedBlocks = blocksInDay.reduce((acc: [ScheduleBlock[]], currentValue) => {
-            let lastSub = acc[acc.length - 1];
-            if (lastSub.length <= 0) {
-                lastSub.push(currentValue);
-            } else {
-                if (lastSub[lastSub.length - 1].end_at === currentValue.start_at) {
-                    lastSub.push(currentValue);
-                } else {
-                    acc.push([currentValue]);
-                }
-            }
-
-            return acc;
-        }, [[]]);
-
-        return compactedBlocks.map(blocks => {
-            if (blocks.length === 0) {
-                return null;
-            }
-
-            const start = dayjs(blocks[0].start_at).format('LT');
-            const end = dayjs(blocks[blocks.length - 1].end_at).format('LT');
-
-            return (
-                <Tag key={blocks[0].id}>{start} to {end}</Tag>
-            )
-        })
+    const getSevenDayPeriod = () => {
+        return [
+            selectedDate.subtract(3, 'day'),
+            selectedDate.subtract(2, 'day'),
+            selectedDate.subtract(1, 'day'),
+            selectedDate,
+            selectedDate.add(1, 'day'),
+            selectedDate.add(2, 'day'),
+            selectedDate.add(3, 'day')
+        ];
     };
 
-    const onDaySelect = (value: any) => setSelectedDay(value.valueOf());
+    const changeDayBy = (amt: number) => {
+        setSelectedDate(prevState => prevState.add(amt, 'day'));
+    };
+
+    const goToToday = () => {
+        setSelectedDate(dayjs());
+    }
 
     const onCreateScheduleBlock = () => {
         setVisible(false);
         mutate();
+    };
+
+    if (!scheduleBlocks) {
+        return <Skeleton active />;
     }
 
     return (
-        <>
+        <div style={{display: 'flex', flexDirection: 'column', maxHeight: 'calc(100vh - 120px)'}}>
             {vaccineShipment && (
-                <NewSchedulingBlockModal onOk={onCreateScheduleBlock} onCancel={() => setVisible(false)} vaccine={vaccineShipment} visible={visible} />
+                <NewSchedulingBlockModal
+                    onOk={onCreateScheduleBlock}
+                    onCancel={() => setVisible(false)}
+                    vaccine={vaccineShipment}
+                    visible={visible}
+                    activeDate={selectedDate}
+                />
             )}
 
-            <Typography.Title level={2}>Vaccine Schedule</Typography.Title>
+            <Typography.Title level={5} style={{textAlign: 'center'}}>Viewing Schedule For</Typography.Title>
 
-            <Divider>
-                <Button type="primary" onClick={() => setVisible(true)}>Create Scheduling Block</Button>
-            </Divider>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Space>
+                    <Button icon={<FastBackwardOutlined />} type="primary" size="large" onClick={() => changeDayBy(-7)} />
+                    <Button icon={<StepBackwardOutlined />} type="primary" size="large" onClick={() => changeDayBy(-1)} />
+                    <Typography.Title level={2} style={{textAlign: 'center', margin: 0}}>{selectedDate.format('dddd, LL')}</Typography.Title>
+                    <Button icon={<StepForwardOutlined />} type="primary" size="large" onClick={() => changeDayBy(1)} />
+                    <Button icon={<FastForwardOutlined />} type="primary" size="large" onClick={() => changeDayBy(7)} />
+                </Space>
+            </div>
 
-            <Row gutter={16}>
-                <Col xl={20} md={24}>
-                    <Calendar onSelect={onDaySelect} dateCellRender={dateCellRenderer} />
-                </Col>
+            <Button type="link" onClick={goToToday}>Go To Today</Button>
 
-                <Col xl={4} md={24}>
-                    <Timeline mode="left">
-                        {scheduleBlocks?.filter(block => dayjs(block.start_at).isSame(dayjs(selectedDay), 'day')).map(block => (
-                            <Timeline.Item
-                                key={block.id}
-                                label={dayjs(block.start_at).format('LT')}
-                            >
-                                {block.slots} doses
-                            </Timeline.Item>
-                        ))}
-                    </Timeline>
-                </Col>
-            </Row>
-        </>
+            <div style={weekGrid}>
+                {getSevenDayPeriod().map(day => {
+                    const isActive = dayjs(selectedDate).isSame(day, 'date');
+                    const scheduleBlocksOnDay = scheduleBlocks?.filter(block => dayjs(block.start_at).isSame(day, 'date'));
+
+                    return (
+                        <Card
+                            style={isActive ? activeCard : dateCard}
+                            key={day.valueOf()}
+                            onClick={() => setSelectedDate(day)}
+                        >
+                            <Typography.Title level={5}>{day.format('ddd, MMMM D, YYYY')}</Typography.Title>
+                            <Typography.Paragraph>{scheduleBlocksOnDay?.length} Time Slots</Typography.Paragraph>
+                        </Card>
+                    );
+                })}
+            </div>
+
+            <div style={{flex: 'auto', overflow: 'scroll'}}>
+                <TimeCalendar events={
+                    scheduleBlocks
+                        .filter(block => dayjs(block.start_at).isSame(selectedDate, 'date'))
+                        .map(block => ({
+                            timestamp: block.start_at,
+                            content: `${dayjs(block.start_at).format('LT')} (${block.slots} Slots)`
+                        }))
+                } />
+            </div>
+
+            <div style={{margin: 'auto', marginTop: 10}}>
+                <Button type="primary" onClick={() => setVisible(true)}>New Schedule Block</Button>
+            </div>
+        </div>
     )
 };
 

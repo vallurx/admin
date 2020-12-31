@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { useVaccineShipmentList } from '../lib/data/use-vaccines';
 import NewVaccineShipmentModal from '../components/NewVaccineShipmentModal';
 import { VaccineBatch } from '../types/vaccine';
-import { manufacturers } from '../lib/manufacturers';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
+import { manufacturers } from '../lib/manufacturers';
 
 const VaccineShipments = () => {
     const [visible, setVisible] = useState(false);
@@ -38,7 +38,7 @@ const VaccineShipments = () => {
                                     {item.vaccine_count}
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Manufacturer">
-                                    Test
+                                    {manufacturers[item.manufacturer]}
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Shipment Created">
                                     {dayjs(item.created_at).utc(true).local().format('LLL')}

@@ -1,3 +1,5 @@
+import { manufacturers } from '../lib/manufacturers';
+
 export interface Vaccine {
     id: number;
     name: string;
@@ -17,6 +19,7 @@ export interface VaccineBatch {
     lot_number: string;
     vaccine_id: number;
     name: string;
+    manufacturer: keyof typeof manufacturers;
 }
 
 export interface ScheduleBlock {

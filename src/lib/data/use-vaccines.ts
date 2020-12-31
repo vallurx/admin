@@ -12,6 +12,17 @@ const useVaccineList = () => {
     };
 };
 
+const useVaccine = (id: number) => {
+    const { data, error, mutate } = useSWR<Vaccine>(`/api/vaccines/${id}`);
+
+    return {
+        vaccine: data,
+        error,
+        mutate,
+        loading: !data && !error
+    };
+};
+
 const useVaccineShipmentList = () => {
     const { data, error, mutate } = useSWR<VaccineBatch[]>(`/api/facilities/1/vaccine_shipments`);
 
@@ -45,4 +56,4 @@ const useScheduleBlocks = (batchId: number) => {
     };
 }
 
-export { useVaccineList, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks };
+export { useVaccineList, useVaccine, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks };
