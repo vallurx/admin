@@ -2,7 +2,7 @@
   "name": "admin",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:9090",
+  "proxy": "http://73.222.115.200:9095",
   "homepage": "https://clark.vallurx.com/admin",
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
