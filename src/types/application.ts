@@ -62,7 +62,17 @@ export interface Application {
     notes: string,
 }
 
-
+export interface ScheduleBlockApplication {
+    id: number;
+    created_at: number;
+    first_name: string;
+    middle_initial: string;
+    last_name: string;
+    suffix: string;
+    date_of_birth: string;
+    phone_number: string;
+    status: string;
+}
 
 export interface ApplicationResult {
     cvx_vaccine_code: string;

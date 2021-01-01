@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { Application, ApplicationListResults } from '../../types';
+import { Application, ApplicationListResults, ScheduleBlockApplication } from '../../types';
 
 interface AppFilters {
     status: string;
@@ -17,6 +17,17 @@ const useApplicationList = (currentPage = 1, count = 10, filters: AppFilters = d
 
     return {
         applicationList: data,
+        error,
+        loading: !data && !error,
+        mutate
+    };
+};
+
+const useApplicationsByScheduleBlock = (blockId: number) => {
+    const { data, error, mutate } = useSWR<ScheduleBlockApplication[]>(`/api/schedule_blocks/${blockId}/applications`);
+
+    return {
+        applications: data,
         error,
         loading: !data && !error,
         mutate
@@ -50,4 +61,4 @@ const useQueuedApplication = () => {
     };
 };
 
-export { useApplicationList, useApplication, useQueuedApplication };
+export { useApplicationList, useApplication, useQueuedApplication, useApplicationsByScheduleBlock };

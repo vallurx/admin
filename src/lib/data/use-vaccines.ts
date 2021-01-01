@@ -54,6 +54,17 @@ const useScheduleBlocks = (batchId: number) => {
         mutate,
         loading: !data && !error
     };
+};
+
+const useScheduleBlock = (blockId: number) => {
+    const { data, error, mutate } = useSWR<ScheduleBlock>(`/api/schedule_blocks/${blockId}`);
+
+    return {
+        scheduleBlock: data,
+        error,
+        mutate,
+        loading: !data && !error
+    };
 }
 
-export { useVaccineList, useVaccine, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks };
+export { useVaccineList, useVaccine, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks, useScheduleBlock };

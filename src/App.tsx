@@ -18,6 +18,7 @@ import ShipmentSchedule from './routes/ShipmentSchedule';
 import InviteUserModal from './components/InviteUserModal';
 import RegisterUser from './routes/RegisterUser';
 import { axios } from './lib/axios';
+import ScheduleApplications from './routes/ScheduleApplications';
 
 const logoStyles: CSSProperties = {
     width: '100%',
@@ -166,6 +167,12 @@ const App = () => {
                     <AuthenticatedRoute path="/vaccines/:id/schedule" exact>
                         <NurseWrapper>
                             <ShipmentSchedule />
+                        </NurseWrapper>
+                    </AuthenticatedRoute>
+
+                    <AuthenticatedRoute path="/vaccines/:id/schedule/:blockId" exact>
+                        <NurseWrapper>
+                            <ScheduleApplications />
                         </NurseWrapper>
                     </AuthenticatedRoute>
                 </Switch>

@@ -4,7 +4,7 @@ import { FastBackwardOutlined, FastForwardOutlined, StepBackwardOutlined, StepFo
 import dayjs from 'dayjs';
 import TimeCalendar from '../components/TimeCalendar';
 import { useScheduleBlocks, useVaccineShipment } from '../lib/data/use-vaccines';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import NewSchedulingBlockModal from '../components/NewSchedulingBlockModal';
 
 const weekGrid: CSSProperties = {
@@ -27,6 +27,7 @@ const activeCard: CSSProperties = {
 
 const ShipmentSchedule = () => {
     const { id } = useParams<{ id: string }>();
+    const history = useHistory();
     const { scheduleBlocks, mutate } = useScheduleBlocks(parseInt(id));
     const { vaccineShipment } = useVaccineShipment(parseInt(id));
     const [visible, setVisible] = useState(false);
@@ -56,6 +57,10 @@ const ShipmentSchedule = () => {
         setVisible(false);
         mutate();
     };
+
+    const goToBlock = (batchId: number) => {
+        history.push('/vaccines/' + id + '/schedule/' + batchId);
+    }
 
     if (!scheduleBlocks) {
         return <Skeleton active />;
@@ -105,19 +110,23 @@ const ShipmentSchedule = () => {
                 })}
             </div>
 
-            <div style={{flex: 'auto', overflow: 'scroll'}}>
-                <TimeCalendar events={
-                    scheduleBlocks
-                        .filter(block => dayjs(block.start_at).isSame(selectedDate, 'date'))
-                        .map(block => ({
-                            timestamp: block.start_at,
-                            content: `${dayjs(block.start_at).format('LT')} (${block.slots} Slots)`
-                        }))
-                } />
-            </div>
-
             <div style={{margin: 'auto', marginTop: 10}}>
                 <Button type="primary" onClick={() => setVisible(true)}>New Schedule Block</Button>
+            </div>
+
+            <div style={{flex: 'auto', overflow: 'scroll'}}>
+                <TimeCalendar
+                    events={
+                        scheduleBlocks
+                            .filter(block => dayjs(block.start_at).isSame(selectedDate, 'date'))
+                            .map(block => ({
+                                id: block.id,
+                                timestamp: block.start_at,
+                                content: `${dayjs(block.start_at).format('LT')} (${block.slots} Slots)`
+                            }))
+                    }
+                    onSelect={event => goToBlock(event.id)}
+                />
             </div>
         </div>
     )

@@ -3,12 +3,14 @@ import { Col, Divider, Row, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 
 interface CalendarEvent {
+    id: number;
     timestamp: number;
     content: string;
 }
 
 interface TimeCalendarProps {
     events: CalendarEvent[];
+    onSelect: (event: CalendarEvent) => void;
 }
 
 const timeStyles: CSSProperties = {
@@ -17,7 +19,7 @@ const timeStyles: CSSProperties = {
 }
 
 const TimeCalendar = (props: TimeCalendarProps) => {
-    const { events } = props;
+    const { events, onSelect } = props;
 
     const combineEventsByHour = () => {
         return events.reduce((acc: CalendarEvent[][], value: CalendarEvent) => {
@@ -58,7 +60,7 @@ const TimeCalendar = (props: TimeCalendarProps) => {
                                     <Divider />
 
                                     {eventsInHour.map(e => (
-                                        <Tag key={e.timestamp}>{e.content}</Tag>
+                                        <Tag key={e.timestamp} color="blue" style={{cursor: 'pointer'}} onClick={() => onSelect(e)}>{e.content}</Tag>
                                     ))}
                                 </Col>
                             </Row>
