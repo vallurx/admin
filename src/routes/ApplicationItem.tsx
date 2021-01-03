@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useApplication } from '../lib/data/use-application';
 import { useParams } from 'react-router';
-import { Button, Col, Divider, Form, Input, notification, Radio, Row, Skeleton, Space, Typography } from 'antd';
-import VaccineApplicationUI from '../components/VaccineApplicationUI';
+import { Button, Col, Divider, notification, Row, Skeleton, Space, Typography } from 'antd';
 import { axios } from '../lib/axios';
+import baseAxios from 'axios';
 import { saveAs } from 'file-saver';
-
-type AppStatus = 'Scheduling' | 'Rejected' | 'AwaitingApproval' | 'InformationNeeded';
+import ApplicationReviewUI from '../components/application/ApplicationReviewUI';
+import PatientUI from '../components/patient/PatientUI';
+import PatientApplicationUI from '../components/application/PatientApplicationUI';
+import { usePatient } from '../lib/data/use-patient';
+import ApplicationStatusUI from '../components/application/ApplicationStatusUI';
+import ApplicationResultsUI from '../components/application/ApplicationResultsUI';
 
 const ApplicationItem = () => {
     const { id } = useParams<{ id: string }>();
     const { application, mutate } = useApplication(parseInt(id));
-    const [appStatus, setAppStatus] = useState<AppStatus>('AwaitingApproval');
-    const [appNotes, setAppNotes] = useState('');
+    const { patient } = usePatient(application?.patient_id);
+    const [reviewData, setReviewData] = useState({
+        notes: '',
+        status: 'AwaitingApproval'
+    });
     const [pdfLoading, setPDFLoading] = useState(false);
     const [qrLoading, setQRLoading] = useState(false);
 
-    const reviewApplication = async () => {
-        if (appStatus === 'AwaitingApproval') {
+    const reviewApplication = async (data: { notes: string, status: string }) => {
+        if (data.status === 'AwaitingApproval') {
             notification.error({
                 message: 'Hold on!',
                 description: 'You must make a decision. If you are unsure, select Information Needed.'
@@ -27,18 +34,12 @@ const ApplicationItem = () => {
         }
 
         try {
-            await axios.post(`/api/facilities/1/application/${application?.id}`, {
-                status: appStatus,
-                notes: appNotes
-            });
+            await axios.post(`/api/applications/${application?.id}`, data);
 
             notification.success({
                 message: 'Success!',
                 description: 'Successfully reviewed vaccine application!'
             });
-
-            setAppStatus('AwaitingApproval');
-            setAppNotes('');
 
             await mutate();
         } catch (e) {
@@ -47,7 +48,60 @@ const ApplicationItem = () => {
                 description: 'There was an error reviewing this application. Please contact VallurX.'
             });
         }
-    }
+    };
+
+    const onSubmitResults = async (data: any) => {
+        if (!data.signatureData) {
+            notification.error({
+                message: 'Uh oh!',
+                description: 'A signature is required to submit results.'
+            });
+
+            return;
+        }
+
+        try {
+            const resultData = {
+                anatomical_route: data.anatomical_route,
+                anatomical_site: data.anatomical_site,
+                dose_size: data.dose_size,
+                expiration_date: data.expiration_date,
+                notes: data.notes,
+                has_nurse_sig_image: true
+            }
+
+            const res = await axios.put('/api/applications/' + application?.id + '/results', resultData);
+            const { nurse_sig_image_url } = res.data;
+
+            const byteString = atob(data.signatureData.split(',')[1]);
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            await baseAxios.put(nurse_sig_image_url, new Blob([ab], { type: 'image/png' }), {
+                headers: {
+                    'Content-Type': 'image/png'
+                }
+            });
+
+            notification.success({
+                message: 'Success!',
+                description: 'You have successfully submitted the vaccination results.'
+            })
+
+            mutate();
+        } catch (e) {
+            console.error(e);
+
+            notification.error({
+                message: 'Uh oh!',
+                description: 'There was an error submitting the results.'
+            });
+        }
+    };
 
     const generateQRCode = async () => {
         setQRLoading(true);
@@ -63,9 +117,9 @@ const ApplicationItem = () => {
                     <html lang="en-us">
                     <body>
                     <h1>Vaccine Information</h1>
-                    <p><b>Name:</b> ${application?.first_name} ${application?.last_name}</p>
-                    <p><b>Date of Birth:</b> ${application?.date_of_birth}</p>
-                    <p><b>Phone Number: </b> ${application?.phone_number}</p>
+                    <p><b>Name:</b> ${patient?.first_name} ${patient?.last_name}</p>
+                    <p><b>Date of Birth:</b> ${patient?.date_of_birth}</p>
+                    <p><b>Phone Number: </b> ${patient?.phone_number}</p>
                     <img style="width: 500px" alt="qr code" src="data:image/png;base64, ${res.data.data}" />
                     </body>
                     </html>
@@ -87,7 +141,7 @@ const ApplicationItem = () => {
 
             setQRLoading(false);
         }
-    }
+    };
 
     const exportPDF = async () => {
         setPDFLoading(true);
@@ -97,18 +151,20 @@ const ApplicationItem = () => {
                 responseType: 'blob'
             });
 
-            saveAs(res.data, `${application?.first_name} ${application?.last_name} Vaccine Application.pdf`);
+            saveAs(res.data, `${patient?.first_name} ${patient?.last_name} Vaccine Application.pdf`);
         } catch (e) {
             console.error(e);
         } finally {
             setPDFLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         if (application) {
-            setAppStatus(application.status as AppStatus);
-            setAppNotes(application.notes);
+            setReviewData({
+                notes: application.notes,
+                status: application.status
+            });
         }
     }, [application]);
 
@@ -120,7 +176,15 @@ const ApplicationItem = () => {
         <>
             <Typography.Title>Application Review</Typography.Title>
 
-            <VaccineApplicationUI application={application} editable onEdit={mutate} />
+            <ApplicationStatusUI status={application.status} />
+
+            <br />
+
+            <PatientUI patientId={application.patient_id} />
+
+            <Divider />
+
+            <PatientApplicationUI applicationId={application.id} />
 
             <br />
 
@@ -136,32 +200,31 @@ const ApplicationItem = () => {
                 </Button>
             </Space>
 
-            <Divider>Review</Divider>
+            {application.status === 'AwaitingApproval' && (
+                <>
+                    <Divider>Review</Divider>
 
-            <Row>
-                <Col span={16} offset={4}>
-                    <Form layout="vertical">
-                        <Form.Item label="Decision">
-                            <Radio.Group value={appStatus} onChange={e => setAppStatus(e.target.value)} buttonStyle="solid">
-                                <Radio.Button value="AwaitingApproval" disabled>Pending</Radio.Button>
-                                <Radio.Button value="Scheduling">Approved</Radio.Button>
-                                <Radio.Button value="Rejected">Rejected</Radio.Button>
-                                <Radio.Button value="InformationNeeded">Information Needed</Radio.Button>
-                            </Radio.Group>
-                        </Form.Item>
+                    <Row>
+                        <Col span={16} offset={4}>
+                            <ApplicationReviewUI initialValues={reviewData} onSubmit={reviewApplication} />
+                        </Col>
+                    </Row>
+                </>
+            )}
 
-                        <Form.Item label="Notes">
-                            <Input.TextArea value={appNotes} onChange={e => setAppNotes(e.target.value)} rows={10} />
-                        </Form.Item>
+            {(application.status === 'Scheduled' || application.status === 'Vaccinated') && (
+                <>
+                    <Divider>Results</Divider>
 
-                        <Form.Item>
-                            <Button type="primary" onClick={reviewApplication}>Submit</Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
+                    <Row>
+                        <Col span={16} offset={4}>
+                            <ApplicationResultsUI onSubmit={onSubmitResults} notes={application.notes} />
+                        </Col>
+                    </Row>
+                </>
+            )}
         </>
-    )
+    );
 };
 
 export default ApplicationItem;

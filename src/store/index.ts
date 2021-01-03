@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 
 import userReducer from './user/user.slice';
+import vaccineReducer from './vaccine.slice';
 
 const rootReducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    vaccine: vaccineReducer
 });
 
 export default rootReducer;

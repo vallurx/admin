@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const NurseDashboard = () => {
     const { user, loading } = useUser();
-    const { applicationList } = useApplicationList();
+    const { applicationList } = useApplicationList(1, 10, { status: 'AwaitingApproval', name: '' });
 
     return (
         <Spin spinning={loading}>

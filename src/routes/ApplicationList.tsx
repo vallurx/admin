@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ApplicationListItem } from '../types';
+import { ApplicationListItem } from '../lib/types';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { Button, Input, Space, Table, Typography } from 'antd';
@@ -93,11 +93,7 @@ const ApplicationList = () => {
         {
             title: 'Actions',
             render: (value, record) => {
-                return (record.status === 'Scheduled' || record.status === 'Vaccinated') ? (
-                    <Link to={'/applications/' + record.id + '/results'}>
-                        <Button type="primary">View Results</Button>
-                    </Link>
-                ) : (
+                return (
                     <Link to={'/applications/' + record.id}>
                         <Button type="primary">View Application</Button>
                     </Link>

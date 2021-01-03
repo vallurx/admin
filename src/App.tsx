@@ -13,12 +13,13 @@ import ApplicationQueue from './routes/ApplicationQueue';
 import logo from './assets/VallurX Logo Dark Transparent.png';
 import VaccineShipments from './routes/VaccineShipments';
 import ApplicationItem from './routes/ApplicationItem';
-import ApplicationResults from './routes/ApplicationResults';
 import ShipmentSchedule from './routes/ShipmentSchedule';
-import InviteUserModal from './components/InviteUserModal';
+import InviteUserModal from './components/auth/InviteUserModal';
 import RegisterUser from './routes/RegisterUser';
 import { axios } from './lib/axios';
 import ScheduleApplications from './routes/ScheduleApplications';
+import { useDispatch } from 'react-redux';
+import { setVaccines } from './store/vaccine.slice';
 
 const logoStyles: CSSProperties = {
     width: '100%',
@@ -110,7 +111,20 @@ const NurseWrapper = (props: { children: any }) => {
 }
 
 const App = () => {
-    const { loading } = useUser();
+    const { user, loading } = useUser();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (user) {
+            axios
+                .get('/api/vaccines')
+                .then(res => {
+                    dispatch(setVaccines(res.data))
+                })
+                .catch(e => console.error(e));
+
+        }
+    }, [user, dispatch]);
 
     return (
         <BrowserRouter basename={process.env.NODE_ENV === 'production' ? '/admin' : ''}>
@@ -143,12 +157,6 @@ const App = () => {
                     <AuthenticatedRoute path="/applications/:id" exact>
                         <NurseWrapper>
                             <ApplicationItem />
-                        </NurseWrapper>
-                    </AuthenticatedRoute>
-
-                    <AuthenticatedRoute path="/applications/:id/results" exact>
-                        <NurseWrapper>
-                            <ApplicationResults />
                         </NurseWrapper>
                     </AuthenticatedRoute>
 

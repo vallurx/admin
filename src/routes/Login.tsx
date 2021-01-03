@@ -1,7 +1,7 @@
 import React, { CSSProperties, useState } from 'react';
 import { Alert, Button, Card, Form, Input } from 'antd';
 import axios from 'axios';
-import { LoginResponse } from '../types';
+import { LoginResponse } from '../lib/types';
 import { useHistory } from 'react-router';
 import { ErrorTypes, getError } from '../lib/error-lookup';
 import useUser from '../lib/data/use-user';

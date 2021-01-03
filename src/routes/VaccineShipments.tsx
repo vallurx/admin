@@ -1,8 +1,8 @@
 import { Button, Card, Descriptions, Divider, List, Typography } from 'antd';
 import React, { useState } from 'react';
 import { useVaccineShipmentList } from '../lib/data/use-vaccines';
-import NewVaccineShipmentModal from '../components/NewVaccineShipmentModal';
-import { VaccineBatch } from '../types/vaccine';
+import NewVaccineShipmentModal from '../components/vaccine/NewVaccineShipmentModal';
+import { VaccineBatch } from '../lib/types/vaccine';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import { manufacturers } from '../lib/manufacturers';

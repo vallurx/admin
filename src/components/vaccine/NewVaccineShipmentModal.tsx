@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, InputNumber, Modal, notification, Select } from 'antd';
-import { axios } from '../lib/axios';
-import { useVaccineList } from '../lib/data/use-vaccines';
+import { axios } from '../../lib/axios';
+import { useVaccineList } from '../../lib/data/use-vaccines';
 
 interface NewVaccineShipmentModalProps {
     visible: boolean;

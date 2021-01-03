@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Modal, notification } from 'antd';
-import { axios } from '../lib/axios';
+import { axios } from '../../lib/axios';
 
 interface InviteUserForm {
     name: string;

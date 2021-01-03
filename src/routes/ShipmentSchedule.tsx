@@ -2,10 +2,10 @@ import React, { CSSProperties, useState } from 'react';
 import { Button, Card, Skeleton, Space, Typography } from 'antd';
 import { FastBackwardOutlined, FastForwardOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import TimeCalendar from '../components/TimeCalendar';
+import TimeCalendar from '../components/scheduling/TimeCalendar';
 import { useScheduleBlocks, useVaccineShipment } from '../lib/data/use-vaccines';
 import { useHistory, useParams } from 'react-router';
-import NewSchedulingBlockModal from '../components/NewSchedulingBlockModal';
+import NewSchedulingBlockModal from '../components/scheduling/NewSchedulingBlockModal';
 
 const weekGrid: CSSProperties = {
     display: 'flex',

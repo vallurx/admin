@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { User } from '../../types';
+import { User } from '../types';
 
 const useUser = () => {
     const { data, error, mutate } = useSWR<User>('/api/user');

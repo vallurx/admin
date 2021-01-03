@@ -1,29 +1,28 @@
 import {
-    Button,
     Col,
     Divider,
-    Form,
-    Input,
-    notification, Radio,
+    notification,
     Result,
     Row,
     Skeleton,
     Typography
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueuedApplication } from '../lib/data/use-application';
 import { axios } from '../lib/axios';
-import VaccineApplicationUI from '../components/VaccineApplicationUI';
-
-type AppStatus = 'Scheduling' | 'Rejected' | 'AwaitingApproval' | 'InformationNeeded';
+import ApplicationReviewUI from '../components/application/ApplicationReviewUI';
+import PatientUI from '../components/patient/PatientUI';
+import PatientApplicationUI from '../components/application/PatientApplicationUI';
 
 const ApplicationQueue = () => {
-    const [appStatus, setAppStatus] = useState<AppStatus>('AwaitingApproval');
-    const [appNotes, setAppNotes] = useState('');
     const { application, mutateList, endOfQueue } = useQueuedApplication();
+    const [reviewData, setReviewData] = useState({
+        notes: '',
+        status: 'AwaitingApproval'
+    });
 
-    const reviewApplication = async () => {
-        if (appStatus === 'AwaitingApproval') {
+    const reviewApplication = async (data: { notes: string, status: string }) => {
+        if (data.status === 'AwaitingApproval') {
             notification.error({
                 message: 'Hold on!',
                 description: 'You must make a decision. If you are unsure, select Information Needed.'
@@ -33,18 +32,12 @@ const ApplicationQueue = () => {
         }
 
         try {
-            await axios.post(`/api/facilities/1/application/${application?.id}`, {
-                status: appStatus,
-                notes: appNotes
-            });
+            await axios.post(`/api/applications/${application?.id}`, data);
 
             notification.success({
                 message: 'Success!',
                 description: 'Successfully reviewed vaccine application! Moving to next in queue...'
             });
-
-            setAppStatus('AwaitingApproval');
-            setAppNotes('');
 
             await mutateList();
         } catch (e) {
@@ -53,7 +46,16 @@ const ApplicationQueue = () => {
                 description: 'There was an error reviewing this application. Please contact VallurX.'
             });
         }
-    }
+    };
+
+    useEffect(() => {
+        if (application) {
+            setReviewData({
+                notes: application.notes,
+                status: application.status
+            });
+        }
+    }, [application]);
 
     if (endOfQueue) {
         return (
@@ -69,30 +71,19 @@ const ApplicationQueue = () => {
         <>
             <Typography.Title level={2}>Application Queue</Typography.Title>
 
-            <VaccineApplicationUI application={application} />
+            <PatientUI patientId={application.patient_id} />
+
+            <Divider />
+
+            <PatientApplicationUI applicationId={application.id} />
+
+            <br />
 
             <Divider>Review</Divider>
 
             <Row>
                 <Col span={16} offset={4}>
-                    <Form layout="vertical">
-                        <Form.Item label="Decision">
-                            <Radio.Group value={appStatus} onChange={e => setAppStatus(e.target.value)} buttonStyle="solid">
-                                <Radio.Button value="AwaitingApproval" disabled>Pending</Radio.Button>
-                                <Radio.Button value="Scheduling">Approved</Radio.Button>
-                                <Radio.Button value="Rejected">Rejected</Radio.Button>
-                                <Radio.Button value="InformationNeeded">Information Needed</Radio.Button>
-                            </Radio.Group>
-                        </Form.Item>
-
-                        <Form.Item label="Notes">
-                            <Input.TextArea value={appNotes} onChange={e => setAppNotes(e.target.value)} rows={10} />
-                        </Form.Item>
-
-                        <Form.Item>
-                            <Button type="primary" onClick={reviewApplication}>Submit</Button>
-                        </Form.Item>
-                    </Form>
+                    <ApplicationReviewUI initialValues={reviewData} onSubmit={reviewApplication} />
                 </Col>
             </Row>
         </>

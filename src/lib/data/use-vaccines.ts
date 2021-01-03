@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { ScheduleBlock, Vaccine, VaccineBatch } from '../../types/vaccine';
+import { ScheduleBlock, Vaccine, VaccineBatch, VaccineDose } from '../types';
 
 const useVaccineList = () => {
     const { data, error, mutate } = useSWR<Vaccine[]>(`/api/vaccines`);
@@ -23,6 +23,17 @@ const useVaccine = (id: number) => {
     };
 };
 
+const useVaccineDoses = (vaccineId: number) => {
+    const { data, error, mutate } = useSWR<VaccineDose[]>(`/api/vaccines/${vaccineId}/doses`);
+
+    return {
+        vaccineDoses: data,
+        error,
+        mutate,
+        loading: !data && !error
+    };
+}
+
 const useVaccineShipmentList = () => {
     const { data, error, mutate } = useSWR<VaccineBatch[]>(`/api/facilities/1/vaccine_shipments`);
 
@@ -34,8 +45,8 @@ const useVaccineShipmentList = () => {
     };
 };
 
-const useVaccineShipment = (batchId: number) => {
-    const { data, error, mutate } = useSWR<VaccineBatch>(`/api/facilities/1/vaccine_shipments/${batchId}`);
+const useVaccineShipment = (batchId: number | undefined) => {
+    const { data, error, mutate } = useSWR<VaccineBatch>(() => batchId ? `/api/facilities/1/vaccine_shipments/${batchId}` : null);
 
     return {
         vaccineShipment: data,
@@ -56,8 +67,8 @@ const useScheduleBlocks = (batchId: number) => {
     };
 };
 
-const useScheduleBlock = (blockId: number) => {
-    const { data, error, mutate } = useSWR<ScheduleBlock>(`/api/schedule_blocks/${blockId}`);
+const useScheduleBlock = (blockId: number | undefined) => {
+    const { data, error, mutate } = useSWR<ScheduleBlock>(() => blockId ? `/api/schedule_blocks/${blockId}` : null);
 
     return {
         scheduleBlock: data,
@@ -67,4 +78,4 @@ const useScheduleBlock = (blockId: number) => {
     };
 }
 
-export { useVaccineList, useVaccine, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks, useScheduleBlock };
+export { useVaccineList, useVaccine, useVaccineDoses, useVaccineShipmentList, useVaccineShipment, useScheduleBlocks, useScheduleBlock };

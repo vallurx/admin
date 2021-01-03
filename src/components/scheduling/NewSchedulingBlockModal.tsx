@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
-import { VaccineBatch } from '../types/vaccine';
-import { DatePicker } from './dayjs';
+import { VaccineBatch } from '../../lib/types/vaccine';
+import { DatePicker } from '../dayjs';
 import { Col, Divider, Input, Modal, notification, Row, Space, Tag, Typography } from 'antd';
-import { axios } from '../lib/axios';
+import { axios } from '../../lib/axios';
 
 interface NewSchedulingBlockModalProps {
     onOk: () => void;

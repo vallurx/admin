@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Application } from '../types';
+import { Application } from '../../lib/types';
 import { AutoComplete, Col, Divider, Form, Input, Modal, notification, Radio, Row, Select, Tabs } from 'antd';
 import pick from 'lodash/pick';
-import { axios } from '../lib/axios';
-import { DatePicker } from './dayjs';
+import { axios } from '../../lib/axios';
+import { DatePicker } from '../dayjs';
 import dayjs from 'dayjs';
-import { screeningQuestions, states } from '../lib/static-lists';
+import { screeningQuestions, states } from '../../lib/static-lists';
 
 interface EditApplicationModalProps {
     visible: boolean;
@@ -14,36 +14,7 @@ interface EditApplicationModalProps {
     onCancel: () => void;
 }
 
-const editableFields: (keyof Application)[] = [
-    'first_name',
-    'last_name',
-    'middle_initial',
-    'date_of_birth',
-    'phone_number',
-    'sex',
-    'email',
-    'address_city',
-    'address_state',
-    'address_street',
-    'address_zip',
-    'county',
-    'race',
-    'ethnicity',
-    'guardian_name',
-    'employer',
-    'suffix',
-    'target_populations',
-    'insurance_address_city',
-    'insurance_address_state',
-    'insurance_address_street',
-    'insurance_address_zip',
-    'insurance_group',
-    'insurance_holder_name',
-    'insurance_holder_relationship',
-    'insurance_name',
-    'insurance_phone',
-    'insurance_policy'
-]
+const editableFields: (keyof Application)[] = []
 
 const EditApplicationModal = (props: EditApplicationModalProps) => {
     const { visible, application, onOk, onCancel } = props;
@@ -93,8 +64,7 @@ const EditApplicationModal = (props: EditApplicationModalProps) => {
     }));
 
     const initialFormValues = Object.assign({
-        ...pick(application, editableFields),
-        date_of_birth: dayjs(application.date_of_birth)
+        ...pick(application, editableFields)
     }, ...formQuestions, ...formDetails);
     
     return (

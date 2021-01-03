@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { Application, ApplicationListResults, ScheduleBlockApplication } from '../../types';
+import { Application, ApplicationListResults, ScheduleBlockApplication } from '../types';
 
 interface AppFilters {
     status: string;
@@ -13,7 +13,7 @@ const defaultFilters = {
 
 const useApplicationList = (currentPage = 1, count = 10, filters: AppFilters = defaultFilters) => {
     const filterStr = `skip=${(currentPage - 1) * count}&count=${count}&status=${filters.status || '*'}&filter_name=${filters.name || ''}`;
-    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/application?${filterStr}`);
+    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/applications?${filterStr}`);
 
     return {
         applicationList: data,
@@ -35,7 +35,7 @@ const useApplicationsByScheduleBlock = (blockId: number) => {
 };
 
 const useApplication = (applicationId: number) => {
-    const { data, error, mutate } = useSWR<Application>(`/api/facilities/1/application/${applicationId}`);
+    const { data, error, mutate } = useSWR<Application>(`/api/applications/${applicationId}`);
 
     return {
         application: data,
@@ -46,9 +46,9 @@ const useApplication = (applicationId: number) => {
 }
 
 const useQueuedApplication = () => {
-    const { data: applicationList, error: applicationError, mutate: mutateList } = useSWR<ApplicationListResults>(`/api/facilities/1/application?skip=0&count=1`);
+    const { data: applicationList, error: applicationError, mutate: mutateList } = useSWR<ApplicationListResults>(`/api/facilities/1/applications?skip=0&count=1&status=AwaitingApproval`);
     const { data, error, mutate } = useSWR<Application>(
-        () => applicationList ? `/api/facilities/1/application/${applicationList.items[0].id}` : null
+        () => applicationList ? `/api/applications/${applicationList.items[0].id}` : null
     );
 
     return {
