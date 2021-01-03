@@ -16,12 +16,13 @@ const RegisterUser = () => {
     const [loading, setLoading] = useState(false);
     const history = useHistory();
 
-    const onSubmitForm = async (data: { password: string }) => {
+    const onSubmitForm = async (data: { password: string, phone_number: string }) => {
         setLoading(true);
 
         try {
             await axios.put('/api/user/register', {
                 password: data.password,
+                phone_number: data.phone_number,
                 token
             });
 
