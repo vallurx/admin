@@ -108,6 +108,17 @@ const RegisterUser = () => {
                     layout="vertical"
                 >
                     <Form.Item
+                        name="phone_number"
+                        label="Phone Number"
+                        rules={[
+                            {required: true},
+                            {pattern: /^(\d{3})-?(\d{3})-?(\d{4})$/, message: 'Must be a valid phone number!'}
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
                         label="Password"
                         name="password"
                         rules={[
