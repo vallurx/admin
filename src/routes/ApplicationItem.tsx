@@ -133,7 +133,7 @@ const ApplicationItem = () => {
         setPDFLoading(true);
 
         try {
-            const res = await axios.get(`/api/facilities/1/application/${id}/export_pdf`, {
+            const res = await axios.get(`/api/applications/${id}/export_pdf`, {
                 responseType: 'blob'
             });
 
