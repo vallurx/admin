@@ -1,6 +1,7 @@
 export interface LoginResponse {
     id: number;
     session_id: string;
+    status: 'OK' | '2FA';
 }
 
 export interface User {

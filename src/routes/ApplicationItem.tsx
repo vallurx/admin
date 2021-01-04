@@ -107,25 +107,11 @@ const ApplicationItem = () => {
         setQRLoading(true);
 
         try {
-            const res = await axios.get(`/api/facilities/1/application/${id}/qr_code`);
-
+            const res = await axios.get(`/api/applications/${id}/qr_code`);
             const w = window.open();
 
             if (w) {
-                const html = `
-                    <!DOCTYPE HTML>
-                    <html lang="en-us">
-                    <body>
-                    <h1>Vaccine Information</h1>
-                    <p><b>Name:</b> ${patient?.first_name} ${patient?.last_name}</p>
-                    <p><b>Date of Birth:</b> ${patient?.date_of_birth}</p>
-                    <p><b>Phone Number: </b> ${patient?.phone_number}</p>
-                    <img style="width: 500px" alt="qr code" src="data:image/png;base64, ${res.data.data}" />
-                    </body>
-                    </html>
-                `;
-
-                w.document.write(html);
+                w.document.write(res.data);
 
                 setTimeout(() => {
                     w.window.print();
