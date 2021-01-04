@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import { ApplicationListItem } from '../lib/types';
 import { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
-import { Button, Input, Space, Table, Typography } from 'antd';
-import { useApplicationList } from '../lib/data/use-application';
+import dayjs, { Dayjs } from 'dayjs';
+import { Button, Card, Col, Form, Input, Row, Select, Space, Table, Typography } from 'antd';
+import { AppFilters, useApplicationList } from '../lib/data/use-application';
 import { Link } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
+import { DatePicker } from '../components/dayjs';
 
 const ApplicationList = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [statusFilter, setStatusFilter] = useState('');
-    const [nameFilter, setNameFilter] = useState('');
-    const { loading, applicationList } = useApplicationList(currentPage, 10, {
-        status: statusFilter,
-        name: nameFilter
+    const [tableFilters, setTableFilters] = useState<AppFilters>({
+        status: '*',
+        filter_name: '',
+        filter_dob: '',
+        filter_phone: ''
     });
+    const { loading, applicationList } = useApplicationList(currentPage, 10, tableFilters);
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
     }
 
-    const handleTableChange = (pagination: any, filters: any) => {
-        setStatusFilter(filters.status ? filters.status.join(',') : '');
-        setNameFilter(filters.name || '');
-    };
+    const filterTable = (data: AppFilters & { filter_dob: Dayjs }) => {
+        const dob = dayjs(data.filter_dob);
+
+        setTableFilters({
+            ...data,
+            filter_dob: dob.isValid() ? dob.format('MM/DD/YYYY') : ''
+        });
+    }
 
     const columns: ColumnsType<ApplicationListItem> = [
         {
@@ -32,40 +38,17 @@ const ApplicationList = () => {
                 const mi = record.middle_initial ? ` ${record.middle_initial} ` : ' ';
                 return `${record.first_name}${mi}${record.last_name}`;
             },
-            key: 'full_name',
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-                <div style={{ padding: 8 }}>
-                    <Input
-                        placeholder={`Search Name`}
-                        value={selectedKeys[0]}
-                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                        onPressEnter={() => setNameFilter(selectedKeys[0] as string)}
-                        style={{ width: 188, marginBottom: 8, display: 'block' }}
-                    />
-                    <Space>
-                        <Button
-                            type="primary"
-                            onClick={() => setNameFilter(selectedKeys[0] as string)}
-                            icon={<SearchOutlined />}
-                            size="small"
-                            style={{ width: 90 }}
-                        >
-                            Search
-                        </Button>
-                        <Button onClick={() => {
-                            setNameFilter('');
-                            clearFilters && clearFilters();
-                        }} size="small" style={{ width: 90 }}>
-                            Reset
-                        </Button>
-                    </Space>
-                </div>
-            )
+            key: 'full_name'
         },
         {
             title: 'Date of Birth',
             dataIndex: 'date_of_birth',
             key: 'date_of_birth'
+        },
+        {
+            title: 'Phone Number',
+            dataIndex: 'phone_number',
+            key: 'phone_number'
         },
         {
             title: 'Employer',
@@ -82,13 +65,7 @@ const ApplicationList = () => {
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'status',
-            filters: [
-                { text: 'Awaiting Approval', value: 'AwaitingApproval' },
-                { text: 'Scheduling', value: 'Scheduling' },
-                { text: 'Scheduled', value: 'Scheduled' },
-                { text: 'Vaccinated', value: 'Vaccinated' }
-            ]
+            key: 'status'
         },
         {
             title: 'Actions',
@@ -107,6 +84,56 @@ const ApplicationList = () => {
         <>
             <Typography.Title level={2}>Vaccine Applications</Typography.Title>
 
+            <Card style={{backgroundColor: '#FAFAFA', borderBottom: 'none'}}>
+                <Form
+                    layout="vertical"
+                    onFinish={filterTable}
+                    initialValues={tableFilters}
+                >
+                    <Row gutter={8}>
+                        <Col span={12}>
+                            <Form.Item label="Patient Name" name="filter_name">
+                                <Input allowClear />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={12}>
+                            <Form.Item label="Patient Phone" name="filter_phone">
+                                <Input allowClear />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={8}>
+                        <Col span={12}>
+                            <Form.Item label="Date of Birth" name="filter_dob">
+                                <DatePicker style={{width: '100%'}} format="MM/DD/YYYY" />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={12}>
+                            <Form.Item label="Application Status" name="status">
+                                <Select>
+                                    <Select.Option value="*">All</Select.Option>
+                                    <Select.Option value="AwaitingApproval">Awaiting Approval</Select.Option>
+                                    <Select.Option value="Scheduling">Scheduling</Select.Option>
+                                    <Select.Option value="Scheduled">Scheduled</Select.Option>
+                                    <Select.Option value="Vaccinated">Vaccinated</Select.Option>
+                                    <Select.Option value="InformationNeeded">Information Needed</Select.Option>
+                                    <Select.Option value="Rejected">Rejected</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+                            Search
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+
             <Table
                 columns={columns}
                 dataSource={applicationList?.items}
@@ -118,7 +145,6 @@ const ApplicationList = () => {
                 }}
                 rowKey="id"
                 loading={loading}
-                onChange={handleTableChange}
             />
         </>
     );

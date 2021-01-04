@@ -1,19 +1,40 @@
 import useSWR from 'swr';
 import { Application, ApplicationListResults, ScheduleBlockApplication } from '../types';
 
-interface AppFilters {
-    status: string;
-    name: string;
+export interface AppFilters {
+    status?: string;
+    filter_name?: string;
+    filter_dob?: string;
+    filter_phone?: string;
 }
 
-const defaultFilters = {
-    status: '',
-    name: ''
+const defaultFilters: AppFilters = {
+    status: '*',
+    filter_name: '',
+    filter_dob: '',
+    filter_phone: ''
+}
+
+const generateQuery = (filters: AppFilters): string => {
+    let query = '';
+
+    for (const key in filters) {
+        if (filters[key as keyof AppFilters] === '') {
+            continue;
+        }
+
+        if (query === '') {
+            query = `?${key}=${filters[key as keyof AppFilters]}`;
+        } else {
+            query += `&${key}=${filters[key as keyof AppFilters]}`;
+        }
+    }
+
+    return query;
 }
 
 const useApplicationList = (currentPage = 1, count = 10, filters: AppFilters = defaultFilters) => {
-    const filterStr = `skip=${(currentPage - 1) * count}&count=${count}&status=${filters.status || '*'}&filter_name=${filters.name || ''}`;
-    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/applications?${filterStr}`);
+    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/applications${generateQuery(filters)}`);
 
     return {
         applicationList: data,

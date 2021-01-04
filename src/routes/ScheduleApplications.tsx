@@ -29,7 +29,14 @@ const ScheduleApplications = () => {
                 loading={!applications}
                 renderItem={(app, i) => (
                     <List.Item>
-                        <Card title={'Patient #' + (i + 1)}>
+                        <Card
+                            title={'Patient #' + (i + 1)}
+                            extra={[
+                                <Link to={`/applications/${app.id}`}>
+                                    <Button type="primary">View Application</Button>
+                                </Link>
+                            ]}
+                        >
                             <Descriptions bordered column={1}>
                                 <Descriptions.Item label="Patient Name">{formattedName(app)}</Descriptions.Item>
                                 <Descriptions.Item label="Date of Birth">{app.date_of_birth}</Descriptions.Item>
