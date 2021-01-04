@@ -18,7 +18,7 @@ const LoginRoute = (props: LoginRouteProps) => {
         }
 
         return user && !error ? (
-            <Redirect to={{pathname: '/admin', state: {from: location}}}/>
+            <Redirect to={{pathname: '/', state: {from: location}}}/>
         ) : (
             children
         )},
