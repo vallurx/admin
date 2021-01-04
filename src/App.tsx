@@ -5,6 +5,7 @@ import { Button, Layout, Menu, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import Login from './routes/Login';
 import AuthenticatedRoute from './components/auth/AuthenticatedRoute';
+import LoginRoute from './components/auth/LoginRoute';
 import useUser from './lib/data/use-user';
 import NurseDashboard from './routes/NurseDashboard';
 import { DashboardOutlined, ExperimentOutlined, LogoutOutlined, OrderedListOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
@@ -130,17 +131,18 @@ const App = () => {
         <BrowserRouter basename={process.env.NODE_ENV === 'production' ? '/admin' : ''}>
             <Spin spinning={loading}>
                 <Switch>
-                    <Route path="/login">
+
+                    <LoginRoute path="/login">
                         <LoginWrapper>
                             <Login />
                         </LoginWrapper>
-                    </Route>
+                    </LoginRoute>
 
-                    <Route path="/user/invite">
+                    <LoginRoute path="/user/invite">
                         <LoginWrapper>
                             <RegisterUser />
                         </LoginWrapper>
-                    </Route>
+                    </LoginRoute>
 
                     <AuthenticatedRoute path="/" exact>
                         <NurseWrapper>
