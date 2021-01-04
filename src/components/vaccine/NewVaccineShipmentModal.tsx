@@ -60,7 +60,7 @@ const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
                 </Form.Item>
 
                 <Form.Item name="lot_number" label="Lot Number" rules={[{ required: true }]}>
-                    <InputNumber min={1} />
+                    <Input />
                 </Form.Item>
 
                 <Form.Item name="manufacturer" label="Vaccine Manufacturer" rules={[{ required: true }]}>
