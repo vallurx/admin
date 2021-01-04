@@ -110,7 +110,7 @@ const EditApplicationModal = (props: EditApplicationModalProps) => {
                         <Row gutter={8}>
                             <Col span={8}>
                                 <Form.Item name="date_of_birth" label="Date of Birth" rules={[{required: true}]}>
-                                    <DatePicker style={{width: '100%'}} format="MM/DD/YYYY" />
+                                    <DatePicker style={{width: '100%'}} format="M/D/YYYY" />
                                 </Form.Item>
                             </Col>
 

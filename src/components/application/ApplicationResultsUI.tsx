@@ -92,7 +92,7 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
 
                 <Col span={6}>
                     <Form.Item name="expiration_date" label="Expiration Date">
-                        <DatePicker style={{width: '100%'}} format="MM/DD/YYYY" />
+                        <DatePicker style={{width: '100%'}} format="M/D/YYYY" />
                     </Form.Item>
                 </Col>
             </Row>

@@ -51,7 +51,7 @@ const NurseDashboard = () => {
                     layout="vertical"
                 >
                     <Form.Item label="Generate Report For" name="date">
-                        <DatePicker format="MM/DD/YYYY" style={{width: '100%'}} />
+                        <DatePicker format="M/D/YYYY" style={{width: '100%'}} />
                     </Form.Item>
                 </Form>
             </Modal>
