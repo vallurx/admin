@@ -66,7 +66,7 @@ const NewVaccineShipmentModal = (props: NewVaccineShipmentModalProps) => {
                 <Form.Item name="manufacturer" label="Vaccine Manufacturer" rules={[{ required: true }]}>
                     <Select>
                         {vaccines?.map(v => (
-                            <Select.Option key={v.id} value={v.id}>{v.shorthand}</Select.Option>
+                            <Select.Option key={v.id} value={v.manufacturer.mvx_code}>{v.shorthand}</Select.Option>
                         ))}
                     </Select>
                 </Form.Item>
