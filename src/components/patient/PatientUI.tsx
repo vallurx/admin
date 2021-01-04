@@ -78,10 +78,10 @@ const PatientUI = (props: PatientUIProps) => {
                         <Descriptions.Item label="Insurance Holder Relationship">
                             {patient.insurance_holder_relationship}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Insurance Policy">
+                        <Descriptions.Item label="Policy Number">
                             {patient.insurance_policy}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Insurance Group">
+                        <Descriptions.Item label="Group Number">
                             {patient.insurance_group}
                         </Descriptions.Item>
                         <Descriptions.Item label="Insurance Phone">

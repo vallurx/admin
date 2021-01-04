@@ -310,12 +310,12 @@ const EditApplicationModal = (props: EditApplicationModalProps) => {
 
                         <Row gutter={8}>
                             <Col span={8}>
-                                <Form.Item name="insurance_policy" label="Insurance Policy">
+                                <Form.Item name="insurance_policy" label="Policy Number">
                                     <Input />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item name="insurance_group" label="Insurance Group">
+                                <Form.Item name="insurance_group" label="Group Number">
                                     <Input />
                                 </Form.Item>
                             </Col>
