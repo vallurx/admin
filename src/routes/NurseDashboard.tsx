@@ -14,18 +14,21 @@ const NurseDashboard = () => {
     const [impactVisible, setImpactVisible] = useState(false);
     const [impactLoading, setImpactLoading] = useState(false);
     const [impactForm] = Form.useForm();
+    const [userCSVVisible, setUserCSVVisible] = useState(false);
+    const [userCSVLoading, setUserCSVLoading] = useState(false);
+    const [userCSVForm] = Form.useForm();
 
     const generateImpactReport = async (data: { date: Dayjs }) => {
         setImpactLoading(true);
 
         try {
-            const startTimestamp = data.date.startOf('day').valueOf();
-            const endTimestamp = data.date.endOf('day').valueOf();
-            const reportRes = await axios.get(`/api/facilities/1/impact?start=${startTimestamp}&end=${endTimestamp}`, {
+            const startTimestamp = data.date.startOf('day');
+            const endTimestamp = data.date.endOf('day');
+            const reportRes = await axios.get(`/api/facilities/1/impact?start=${startTimestamp.valueOf()}&end=${endTimestamp.valueOf()}`, {
                 responseType: 'blob'
             });
 
-            saveAs(reportRes.data, 'Impact Report.csv');
+            saveAs(reportRes.data, `Impact Report ${startTimestamp.format('MM-DD-YYYY')} - ${endTimestamp.format('MM-DD-YYYY')}.csv`);
         } catch (e) {
             notification.error({
                 message: 'Uh oh!',
@@ -33,6 +36,27 @@ const NurseDashboard = () => {
             });
         } finally {
             setImpactLoading(false);
+        }
+    };
+
+    const generateUserCSVReport = async (data: { date: [Dayjs, Dayjs] }) => {
+        setUserCSVLoading(true);
+
+        try {
+            const startTimestamp = data.date[0].startOf('day');
+            const endTimestamp = data.date[1].endOf('day');
+            const reportRes = await axios.get(`/api/facilities/1/user_csv?start=${startTimestamp.valueOf()}&end=${endTimestamp.valueOf()}`, {
+                responseType: 'blob'
+            });
+
+            saveAs(reportRes.data, `VallurX Application Report ${startTimestamp.format('MM-DD-YYYY')} - ${endTimestamp.format('MM-DD-YYYY')}.csv`);
+        } catch (e) {
+            notification.error({
+                message: 'Uh oh!',
+                description: 'Unable to generate your application report.'
+            });
+        } finally {
+            setUserCSVLoading(false);
         }
     };
 
@@ -51,7 +75,24 @@ const NurseDashboard = () => {
                     layout="vertical"
                 >
                     <Form.Item label="Generate Report For" name="date">
-                        <DatePicker format="M/D/YYYY" style={{width: '100%'}} />
+                        <DatePicker.RangePicker format="M/D/YYYY" style={{width: '100%'}} />
+                    </Form.Item>
+                </Form>
+            </Modal>
+            <Modal
+                title="Application Data Report"
+                visible={userCSVVisible}
+                onCancel={() => setUserCSVVisible(false)}
+                onOk={userCSVForm.submit}
+                confirmLoading={userCSVLoading}
+            >
+                <Form
+                    form={userCSVForm}
+                    onFinish={generateUserCSVReport}
+                    layout="vertical"
+                >
+                    <Form.Item label="Generate Report For" name="date">
+                        <DatePicker.RangePicker format="M/D/YYYY" style={{width: '100%'}} />
                     </Form.Item>
                 </Form>
             </Modal>
@@ -69,7 +110,11 @@ const NurseDashboard = () => {
 
             <Divider />
 
-            <Button type="primary" size="large" onClick={() => setImpactVisible(true)} icon={<DownloadOutlined />}>
+            <Button type="primary" size="large" onClick={() => setUserCSVVisible(true)} icon={<DownloadOutlined />}>
+                Export Application Data
+            </Button>
+
+            <Button type="primary" size="large" style={{marginLeft: 10}} onClick={() => setImpactVisible(true)} icon={<DownloadOutlined />}>
                 Export Impact Report
             </Button>
         </Spin>
