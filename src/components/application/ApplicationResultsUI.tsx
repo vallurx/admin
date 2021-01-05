@@ -1,18 +1,22 @@
 import React from 'react';
-import { Button, Card, Col, Form, Input, notification, Row, Select } from 'antd';
+import { Button, Card, Col, Form, Input, notification, Row, Select, AutoComplete } from 'antd';
 import DatePicker from '../dayjs/DatePicker';
 import SignaturePad from 'react-signature-pad-wrapper'
+import dayjs from 'dayjs';
 
 interface ApplicationResultsForm {
     anatomical_route: string;
     anatomical_site: string;
     dose_size: string;
     expiration_date: string;
+    lot_number: string;
     notes: string;
 }
 
 interface ApplicationResultsUIProps {
     notes: string;
+    lot_numbers: string[];
+    expiration_dates: string[];
     onSubmit: (data: ApplicationResultsForm) => void;
 }
 
@@ -42,6 +46,9 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
             layout="vertical"
             initialValues={{
                 dose_size: 'full',
+                anatomical_route: 'IM',
+                anatomical_site: 'RD',
+                lot_number: '',
                 notes: notes || ''
             }}
             onFinish={onReview}
@@ -50,14 +57,14 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
                 <Col span={6}>
                     <Form.Item name="anatomical_route" label="Anatomical Route" rules={[{ required: true }]}>
                         <Select>
-                            <Select.Option value="ID">Intradermal</Select.Option>
+                            {/* <Select.Option value="ID">Intradermal</Select.Option> */}
                             <Select.Option value="IM">Intramuscular</Select.Option>
-                            <Select.Option value="IV">Intravenous</Select.Option>
+                            {/* <Select.Option value="IV">Intravenous</Select.Option>
                             <Select.Option value="NS">Nasal</Select.Option>
                             <Select.Option value="O">Oral</Select.Option>
                             <Select.Option value="SC">Subcutaneous</Select.Option>
                             <Select.Option value="TR">Transdermal</Select.Option>
-                            <Select.Option value="OTH">Other Miscellaneous</Select.Option>
+                            <Select.Option value="OTH">Other Miscellaneous</Select.Option> */}
                         </Select>
                     </Form.Item>
                 </Col>
@@ -65,18 +72,18 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
                 <Col span={6}>
                     <Form.Item name="anatomical_site" label="Anatomical Site" rules={[{ required: true }]}>
                         <Select>
-                            <Select.Option value="LA">Left Arm</Select.Option>
+                            {/* <Select.Option value="LA">Left Arm</Select.Option> */}
                             <Select.Option value="LT">Left Thigh</Select.Option>
                             <Select.Option value="LD">Left Deltoid</Select.Option>
-                            <Select.Option value="LG">Left Gluteus Medius</Select.Option>
+                            {/* <Select.Option value="LG">Left Gluteus Medius</Select.Option>
                             <Select.Option value="LVL">Left Vastua Lateralis</Select.Option>
                             <Select.Option value="LLFA">Left Lower Forearm</Select.Option>
-                            <Select.Option value="RA">Right Arm</Select.Option>
+                            <Select.Option value="RA">Right Arm</Select.Option> */}
                             <Select.Option value="RT">Right Thigh</Select.Option>
                             <Select.Option value="RD">Right Deltoid</Select.Option>
-                            <Select.Option value="RG">Right Gluteus Medius</Select.Option>
+                            {/* <Select.Option value="RG">Right Gluteus Medius</Select.Option>
                             <Select.Option value="RVL">Right Vastua Lateralis</Select.Option>
-                            <Select.Option value="RLFA">Right Lower Forearm</Select.Option>
+                            <Select.Option value="RLFA">Right Lower Forearm</Select.Option> */}
                         </Select>
                     </Form.Item>
                 </Col>
@@ -92,7 +99,20 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
 
                 <Col span={6}>
                     <Form.Item name="expiration_date" label="Expiration Date">
-                        <DatePicker style={{width: '100%'}} format="M/D/YYYY" />
+                        <AutoComplete
+                            options={props.expiration_dates.map(x => ({ label: x, value: x }))}
+                        />
+                           {/* (dayjs(x) as unknown) as string */}
+                            {/* <DatePicker style={{width: '100%'}} popupStyle={{display: 'none'}} /> */}
+                        {/* </AutoComplete> */}
+                    </Form.Item>
+                </Col>
+
+                <Col span={6}>
+                    <Form.Item name="lot_number" label="Lot Number" rules={[{required: true, message: 'Required'}]}>
+                        <AutoComplete
+                            options={props.lot_numbers.map(x => ({ label: x, value: x }))}
+                        />
                     </Form.Item>
                 </Col>
             </Row>

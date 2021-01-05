@@ -11,10 +11,12 @@ import PatientApplicationUI from '../components/application/PatientApplicationUI
 import { usePatient } from '../lib/data/use-patient';
 import ApplicationStatusUI from '../components/application/ApplicationStatusUI';
 import ApplicationResultsUI from '../components/application/ApplicationResultsUI';
+import { useVaccineShipment } from '../lib/data/use-vaccines';
 
 const ApplicationItem = () => {
     const { id } = useParams<{ id: string }>();
     const { application, mutate } = useApplication(parseInt(id));
+    const { vaccineShipment } = useVaccineShipment(application?.vaccine_batch_id);
     const { patient } = usePatient(application?.patient_id);
     const [reviewData, setReviewData] = useState({
         notes: '',
@@ -204,7 +206,7 @@ const ApplicationItem = () => {
 
                     <Row>
                         <Col span={16} offset={4}>
-                            <ApplicationResultsUI onSubmit={onSubmitResults} notes={application.notes} />
+                            <ApplicationResultsUI onSubmit={onSubmitResults} notes={application.notes} lot_numbers={vaccineShipment?.lot_numbers || []} expiration_dates={vaccineShipment?.expiration_dates || []}  />
                         </Col>
                     </Row>
                 </>

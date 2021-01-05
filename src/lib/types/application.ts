@@ -44,6 +44,8 @@ export interface ApplicationResults {
     anatomical_site: string;
     dose_size: string;
     signature_url: string;
+    lot_number: string;
+    expiration_date: string;
 }
 
 export interface ScreeningQuestion {
