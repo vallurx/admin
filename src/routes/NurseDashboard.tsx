@@ -110,7 +110,7 @@ const NurseDashboard = () => {
 
             <Divider />
 
-            <Button type="primary" size="large" onClick={() => setUserCSVVisible(true)} icon={<DownloadOutlined />}>
+            <Button type="primary" size="large" style={{marginBottom: 10}} onClick={() => setUserCSVVisible(true)} icon={<DownloadOutlined />}>
                 Export Application Data
             </Button>
 
