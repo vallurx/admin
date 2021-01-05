@@ -29,7 +29,8 @@ export interface VaccineBatch {
     created_at: number;
     vaccine_count: number;
     facility_id: number;
-    lot_number: string;
+    lot_numbers: string[];
+    expiration_dates: string[];
     name: string;
     manufacturer: keyof typeof manufacturers;
     scheduled_vaccines: number;

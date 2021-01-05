@@ -4,7 +4,7 @@ import { getAnswerToQuestion } from '../../lib/screening-questions';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useScheduleBlock, useVaccineShipment } from '../../lib/data/use-vaccines';
+import { useScheduleBlock } from '../../lib/data/use-vaccines';
 import { useApplication } from '../../lib/data/use-application';
 
 interface PatientApplicationUIProps {
@@ -14,7 +14,6 @@ interface PatientApplicationUIProps {
 const PatientApplicationUI = (props: PatientApplicationUIProps) => {
     const { applicationId } = props;
     const { application } = useApplication(applicationId);
-    const { vaccineShipment } = useVaccineShipment(application?.vaccine_batch_id);
     const { scheduleBlock } = useScheduleBlock(application?.schedule_block_id);
 
 
@@ -110,9 +109,9 @@ const PatientApplicationUI = (props: PatientApplicationUIProps) => {
                             Dose {dose.index + 1}
                         </Descriptions.Item>
 
-                        {vaccineShipment && (
+                        {application.results && (
                             <Descriptions.Item label="Lot Number">
-                                Lot {vaccineShipment.lot_number}
+                                Lot {application.results.lot_number}
                             </Descriptions.Item>
                         )}
                     </Descriptions>
