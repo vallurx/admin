@@ -1,4 +1,5 @@
 import {
+    Button,
     Col,
     Divider,
     notification,
@@ -13,9 +14,13 @@ import { axios } from '../lib/axios';
 import ApplicationReviewUI from '../components/application/ApplicationReviewUI';
 import PatientUI from '../components/patient/PatientUI';
 import PatientApplicationUI from '../components/application/PatientApplicationUI';
+import { saveAs } from 'file-saver';
+import { usePatient } from '../lib/data/use-patient';
 
 const ApplicationQueue = () => {
     const { application, mutateList, endOfQueue } = useQueuedApplication();
+    const { patient } = usePatient(application?.patient_id);
+    const [pdfLoading, setPDFLoading] = useState(false);
     const [reviewData, setReviewData] = useState({
         notes: '',
         status: 'AwaitingApproval'
@@ -45,6 +50,22 @@ const ApplicationQueue = () => {
                 message: 'Un oh!',
                 description: 'There was an error reviewing this application. Please contact VallurX.'
             });
+        }
+    };
+
+    const exportPDF = async () => {
+        setPDFLoading(true);
+
+        try {
+            const res = await axios.get(`/api/applications/${application?.id}/export_pdf`, {
+                responseType: 'blob'
+            });
+
+            saveAs(res.data, `${patient?.first_name} ${patient?.last_name} Vaccine Application.pdf`);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setPDFLoading(false);
         }
     };
 
@@ -78,6 +99,10 @@ const ApplicationQueue = () => {
             <PatientApplicationUI applicationId={application.id} />
 
             <br />
+
+            <Button type="primary" onClick={exportPDF} loading={pdfLoading}>
+                Export PDF
+            </Button>
 
             <Divider>Review</Divider>
 

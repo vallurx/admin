@@ -59,14 +59,6 @@ const NurseWrapper = (props: { children: any }) => {
         mutate();
     };
 
-    useEffect(() => {
-        axios.defaults = {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('session_id')
-            }
-        }
-    }, [user]);
-
     return (
         <Layout className={styles.Layout}>
             <Layout.Sider className="main-nav">
@@ -117,13 +109,18 @@ const App = () => {
 
     useEffect(() => {
         if (user) {
+            axios.defaults = {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('session_id')
+                }
+            }
+
             axios
                 .get('/api/vaccines')
                 .then(res => {
                     dispatch(setVaccines(res.data))
                 })
                 .catch(e => console.error(e));
-
         }
     }, [user, dispatch]);
 
