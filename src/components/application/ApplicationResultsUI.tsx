@@ -36,7 +36,7 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
 
         onSubmit({
             ...data,
-            expiration_date: data.expiration_date.format('MM/DD/YYYY'),
+            expiration_date: data.expiration_date,
             signatureData: signatureCanvas?.toDataURL('image/png')
         });
     }
