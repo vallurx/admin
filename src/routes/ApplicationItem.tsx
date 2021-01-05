@@ -11,6 +11,7 @@ import PatientApplicationUI from '../components/application/PatientApplicationUI
 import { usePatient } from '../lib/data/use-patient';
 import ApplicationStatusUI from '../components/application/ApplicationStatusUI';
 import ApplicationResultsUI from '../components/application/ApplicationResultsUI';
+import EditApplicationModal from '../components/application/EditApplicationModal';
 
 const ApplicationItem = () => {
     const { id } = useParams<{ id: string }>();
@@ -20,8 +21,14 @@ const ApplicationItem = () => {
         notes: '',
         status: 'AwaitingApproval'
     });
+    const [visible, setVisible] = useState(false);
     const [pdfLoading, setPDFLoading] = useState(false);
     const [qrLoading, setQRLoading] = useState(false);
+
+    const onEditApplication = () => {
+        setVisible(false);
+        mutate();
+    }
 
     const reviewApplication = async (data: { notes: string, status: string }) => {
         if (data.status === 'AwaitingApproval') {
@@ -162,6 +169,8 @@ const ApplicationItem = () => {
         <>
             <Typography.Title>Application Review</Typography.Title>
 
+            <EditApplicationModal visible={visible} application={application} onOk={onEditApplication} onCancel={() => setVisible(false)} />
+
             <ApplicationStatusUI status={application.status} />
 
             <br />
@@ -175,6 +184,10 @@ const ApplicationItem = () => {
             <br />
 
             <Space>
+                <Button type="primary" onClick={() => setVisible(true)}>
+                    Edit Application
+                </Button>
+
                 {application.status === 'Scheduled' && (
                     <Button type="primary" onClick={generateQRCode} loading={qrLoading}>
                         Generate QR Code

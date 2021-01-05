@@ -8,7 +8,7 @@ import AuthenticatedRoute from './components/auth/AuthenticatedRoute';
 import LoginRoute from './components/auth/LoginRoute';
 import useUser from './lib/data/use-user';
 import NurseDashboard from './routes/NurseDashboard';
-import { DashboardOutlined, ExperimentOutlined, LogoutOutlined, OrderedListOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import { DashboardOutlined, ExperimentOutlined, LogoutOutlined, OrderedListOutlined, SafetyCertificateOutlined, TeamOutlined } from '@ant-design/icons';
 import ApplicationList from './routes/ApplicationList';
 import ApplicationQueue from './routes/ApplicationQueue';
 import logo from './assets/VallurX Logo Dark Transparent.png';
@@ -21,6 +21,8 @@ import { axios } from './lib/axios';
 import ScheduleApplications from './routes/ScheduleApplications';
 import { useDispatch } from 'react-redux';
 import { setVaccines } from './store/vaccine.slice';
+import PatientList from './routes/PatientList';
+import PatientItem from './routes/PatientItem';
 
 const logoStyles: CSSProperties = {
     width: '100%',
@@ -48,6 +50,7 @@ const NurseWrapper = (props: { children: any }) => {
 
     const routes = [
         { href: `/`, title: 'Dashboard', icon: <DashboardOutlined /> },
+        { href: '/patients', title: 'Patient List', icon: <TeamOutlined /> },
         { href: `/applications`, title: 'Application List', icon: <OrderedListOutlined /> },
         { href: `/queue`, title: 'Application Queue', icon: <SafetyCertificateOutlined /> },
         { href: `/vaccines`, title: 'Vaccine Shipments', icon: <ExperimentOutlined /> }
@@ -152,6 +155,18 @@ const App = () => {
                     <AuthenticatedRoute path="/applications/:id" exact>
                         <NurseWrapper>
                             <ApplicationItem />
+                        </NurseWrapper>
+                    </AuthenticatedRoute>
+
+                    <AuthenticatedRoute path="/patients" exact>
+                        <NurseWrapper>
+                            <PatientList />
+                        </NurseWrapper>
+                    </AuthenticatedRoute>
+
+                    <AuthenticatedRoute path="/patients/:id" exact>
+                        <NurseWrapper>
+                            <PatientItem />
                         </NurseWrapper>
                     </AuthenticatedRoute>
 

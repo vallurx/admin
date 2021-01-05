@@ -42,7 +42,9 @@ const ApplicationResultsUI = (props: ApplicationResultsUIProps) => {
             layout="vertical"
             initialValues={{
                 dose_size: 'full',
-                notes: notes || ''
+                notes: notes || '',
+                anatomical_route: 'IM',
+                anatomical_site: 'RA'
             }}
             onFinish={onReview}
         >
