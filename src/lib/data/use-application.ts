@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import { Application, ApplicationListResults, ScheduleBlockApplication } from '../types';
+import { generateQuery } from '../util';
 
 export interface AppFilters {
     status?: string;
@@ -15,26 +16,14 @@ const defaultFilters: AppFilters = {
     filter_phone: ''
 }
 
-const generateQuery = (filters: AppFilters): string => {
-    let query = '';
-
-    for (const key in filters) {
-        if (filters[key as keyof AppFilters] === '') {
-            continue;
-        }
-
-        if (query === '') {
-            query = `?${key}=${filters[key as keyof AppFilters]}`;
-        } else {
-            query += `&${key}=${filters[key as keyof AppFilters]}`;
-        }
-    }
-
-    return query;
-}
-
 const useApplicationList = (currentPage = 1, count = 10, filters: AppFilters = defaultFilters) => {
-    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/applications${generateQuery(filters)}`);
+    const query = {
+        skip: count * (currentPage - 1),
+        count,
+        ...filters
+    };
+
+    const { data, error, mutate } = useSWR<ApplicationListResults>(`/api/facilities/1/applications${generateQuery(query)}`);
 
     return {
         applicationList: data,

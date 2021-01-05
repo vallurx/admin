@@ -37,5 +37,6 @@ export interface Patient extends PatientListItem {
     insurance_address_state: string;
     insurance_address_zip: string;
     ssn: string;
+    ssn4: string;
     notes: string;
 }

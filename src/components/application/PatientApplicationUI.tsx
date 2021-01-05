@@ -16,6 +16,7 @@ const PatientApplicationUI = (props: PatientApplicationUIProps) => {
     const { application } = useApplication(applicationId);
     const { scheduleBlock } = useScheduleBlock(application?.schedule_block_id);
 
+
     const vaccines = useSelector((state: RootState) => state.vaccine);
     const vaccine = vaccines.find(v => v.id === application?.vaccine_id);
     const dose = vaccine?.doses.find(d => d.id === application?.vaccine_dose_id);
@@ -66,7 +67,7 @@ const PatientApplicationUI = (props: PatientApplicationUIProps) => {
 
             {Array.isArray(application.screening_questions) && (
                 <>
-                    <Descriptions title="Screening Questions" bordered column={{ xxl: 3, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 }}>
+                    <Descriptions title="Screening Questions" bordered column={{ xxl: 3, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }}>
                         {application.screening_questions.map(question => (
                             <Descriptions.Item key={question.id} label={question.question} contentStyle={{width: 100}}>
                                 {getAnswerToQuestion(question.answer)}. {question?.details}

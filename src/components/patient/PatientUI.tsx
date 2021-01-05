@@ -4,6 +4,7 @@ import { usePatient } from '../../lib/data/use-patient';
 
 interface PatientUIProps {
     patientId: number;
+
 }
 
 const PatientUI = (props: PatientUIProps) => {
@@ -94,9 +95,9 @@ const PatientUI = (props: PatientUIProps) => {
                     </>
                 )}
 
-                {patient.ssn && (
+                {patient.ssn4 && (
                     <Descriptions.Item label="SSN (Last 4 Digits)">
-                        {patient.ssn}
+                        {patient.ssn4}
                     </Descriptions.Item>
                 )}
             </Descriptions>

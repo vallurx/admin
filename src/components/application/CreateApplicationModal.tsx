@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Application } from '../../lib/types';
+import React, { useState } from 'react';
 import { Col, Divider, Form, Input, Modal, notification, Radio, Row, Select } from 'antd';
 import { axios } from '../../lib/axios';
 import { screeningQuestions } from '../../lib/static-lists';
+import dayjs from 'dayjs';
 
-interface EditApplicationModalProps {
+interface CreateApplicationModalProps {
+    patient_id: number;
     visible: boolean;
-    application: Application;
     onOk: () => void;
     onCancel: () => void;
 }
 
-const EditApplicationModal = (props: EditApplicationModalProps) => {
-    const { visible, application, onOk, onCancel } = props;
+const CreateApplicationModal = (props: CreateApplicationModalProps) => {
+    const { patient_id, visible, onOk, onCancel } = props;
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
     
-    const editApplication = async (data: any) => {
+    const createApplication = async (data: any) => {
         setLoading(true);
         
         try {
             const screeningFormData = screeningQuestions.map((q, i) => {
                 const questionAnswer = data['screening_question_' + i];
-                const questionDetails = data['screening_details_' + i];
+                const questionDetails = data['screening_details_' + i] || '';
 
                 return {
                     id: i + 1,
@@ -31,43 +31,33 @@ const EditApplicationModal = (props: EditApplicationModalProps) => {
                 };
             });
 
-            await axios.post(`/api/applications/${application.id}`, {
+            await axios.put(`/api/applications`, {
+                facility_id: 1,
+                patient_id,
                 target_populations: data.target_populations,
                 screening_questions: screeningFormData,
-                status: application.status,
-                notes: application.notes
+                guardian_name: '',
+                signature_name: '',
+                signature_date: dayjs().format('M/D/YYYY'),
+                print_name: '',
+                relationship: '',
+                notes: ''
             });
+
             onOk();
         } catch (e) {
             notification.error({
                 message: 'Uh oh!',
-                description: 'There was an error updating this application.'
+                description: 'There was an error creating this application.'
             });
         } finally {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        const formQuestions = screeningQuestions.map((q, i) => ({
-            [`screening_question_${i}`]: application.screening_questions ? application.screening_questions.find(q => q.id === i + 1)?.answer : false
-        }));
-
-        const formDetails = screeningQuestions.map((q, i) => ({
-            [`screening_details_${i}`]: application.screening_questions ? application.screening_questions.find(q => q.id === i + 1)?.details : ''
-        }));
-
-        const initialFormValues = Object.assign(
-            { target_populations: application.target_populations },
-            ...formQuestions, ...formDetails
-        );
-
-        form.setFieldsValue(initialFormValues);
-    }, [application, form]);
     
     return (
         <Modal
-            title="Editing Application"
+            title="Create Application"
             forceRender
             visible={visible}
             width="80%"
@@ -78,7 +68,7 @@ const EditApplicationModal = (props: EditApplicationModalProps) => {
             <Form
                 form={form}
                 layout="vertical"
-                onFinish={editApplication}
+                onFinish={createApplication}
             >
                 {screeningQuestions.map((question, i) => (
                     <div key={i}>
@@ -185,4 +175,4 @@ const EditApplicationModal = (props: EditApplicationModalProps) => {
     )
 };
 
-export default EditApplicationModal;
+export default CreateApplicationModal;

@@ -13,3 +13,21 @@ export const formattedName = (userObj: FormattedNameArgs): string => {
 
     return first + middle + last + suffix;
 }
+
+export const generateQuery = (filters: { [key: string]: any }): string => {
+    let query = '';
+
+    for (const key in filters) {
+        if (filters[key] === '') {
+            continue;
+        }
+
+        if (query === '') {
+            query = `?${key}=${filters[key]}`;
+        } else {
+            query += `&${key}=${filters[key]}`;
+        }
+    }
+
+    return query;
+}
