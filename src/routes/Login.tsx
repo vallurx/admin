@@ -31,14 +31,10 @@ const Login = () => {
         try {
             const loginResponse = await axios.post<LoginResponse>('/api/user/login', data);
             const { id, session_id } = loginResponse.data;
-
             localStorage.setItem('user_id', id.toString());
             localStorage.setItem('session_id', session_id);
-
             if (loginResponse.data.status === 'OK') {
                 await mutate();
-
-                setLoading(false);
                 history.push('/');
             } else {
                 setReq2FA(session_id);
@@ -77,7 +73,7 @@ const Login = () => {
         } finally {
             setTimeout(() => {
                 setTFALoading(false);
-            }, 10000);
+            }, 5000);
         }
     }
 

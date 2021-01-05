@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import styles from './App.module.css';
-import { BrowserRouter, Link, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter, Link, Switch, useRouteMatch } from 'react-router-dom';
 import { Button, Layout, Menu, Spin } from 'antd';
 import 'antd/dist/antd.css';
 import Login from './routes/Login';
@@ -109,11 +109,7 @@ const App = () => {
 
     useEffect(() => {
         if (user) {
-            axios.defaults = {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('session_id')
-                }
-            }
+            axios.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem('session_id')
 
             axios
                 .get('/api/vaccines')

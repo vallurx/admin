@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ApplicationListItem } from '../lib/types';
 import { ColumnsType } from 'antd/es/table';
 import dayjs, { Dayjs } from 'dayjs';
-import { Button, Card, Col, Form, Input, Row, Select, Space, Table, Typography } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select, Table, Typography } from 'antd';
 import { AppFilters, useApplicationList } from '../lib/data/use-application';
 import { Link } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
