@@ -69,7 +69,7 @@ const PatientApplicationUI = (props: PatientApplicationUIProps) => {
                 <>
                     <Descriptions title="Screening Questions" bordered column={{ xxl: 3, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }}>
                         {application.screening_questions.map(question => (
-                            <Descriptions.Item key={question.id} label={question.question} contentStyle={{width: 'max(100px, 25%)'}}>
+                            <Descriptions.Item key={question.id} label={question.question} contentStyle={{width: '25%'}}>
                                 {getAnswerToQuestion(question.answer)}. {question?.details}
                             </Descriptions.Item>
                         ))}
