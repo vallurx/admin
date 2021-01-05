@@ -87,7 +87,7 @@ const PatientList = () => {
 
                         <Col span={8}>
                             <Form.Item label="Date of Birth" name="filter_dob">
-                                <DatePicker style={{width: '100%'}} format="MM/DD/YYYY" />
+                                <DatePicker style={{width: '100%'}} format="MM/DD/YYYY" placeholder={dayjs().format("M/D/YYYY")} />
                             </Form.Item>
                         </Col>
                     </Row>

@@ -4,6 +4,7 @@ import { AutoComplete, Col, Divider, Form, Input, Modal, notification, Row, Sele
 import { axios } from '../../lib/axios';
 import { DatePicker } from '../dayjs';
 import { states } from '../../lib/static-lists';
+import dayjs from 'dayjs';
 
 interface EditPatientModalProps {
     visible: boolean;
@@ -92,7 +93,7 @@ const EditPatientModal = (props: EditPatientModalProps) => {
                         <Row gutter={8}>
                             <Col span={8}>
                                 <Form.Item name="date_of_birth" label="Date of Birth" rules={[{required: true}]}>
-                                    <DatePicker style={{width: '100%'}} format="M/D/YYYY" />
+                                    <DatePicker style={{width: '100%'}} format="M/D/YYYY" placeholder={dayjs().format("M/D/YYYY")} />
                                 </Form.Item>
                             </Col>
 

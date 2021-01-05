@@ -5,7 +5,7 @@ import { useApplicationList } from '../lib/data/use-application';
 import { Link } from 'react-router-dom';
 import { DownloadOutlined } from '@ant-design/icons';
 import { axios } from '../lib/axios';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { DatePicker } from '../components/dayjs';
 
 const NurseDashboard = () => {
@@ -75,7 +75,7 @@ const NurseDashboard = () => {
                     layout="vertical"
                 >
                     <Form.Item label="Generate Report For" name="date">
-                        <DatePicker.RangePicker format="M/D/YYYY" style={{width: '100%'}} />
+                        <DatePicker.RangePicker format="M/D/YYYY" placeholder={[dayjs().format("M/D/YYYY"), dayjs().format("M/D/YYYY")]} style={{width: '100%'}} />
                     </Form.Item>
                 </Form>
             </Modal>
@@ -92,7 +92,7 @@ const NurseDashboard = () => {
                     layout="vertical"
                 >
                     <Form.Item label="Generate Report For" name="date">
-                        <DatePicker.RangePicker format="M/D/YYYY" style={{width: '100%'}} />
+                        <DatePicker.RangePicker format="M/D/YYYY" placeholder={[dayjs().format("M/D/YYYY"), dayjs().format("M/D/YYYY")]} style={{width: '100%'}} />
                     </Form.Item>
                 </Form>
             </Modal>
