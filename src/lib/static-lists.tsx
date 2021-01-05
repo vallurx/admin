@@ -240,62 +240,63 @@ export const states = [
 export const screeningQuestions = [
     {
         question:
-            'In the past two weeks, have you tested positive for COVID 19 or are you currently being monitored for Covid19?',
+            'Are you feeling sick today?',
         type: 'text',
     },
     {
         question:
-            'In the past two weeks, have you had contact with anyone who tested positive for COVID 19?',
+            'Have you ever had a severe allergic reaction (e.g., anaphylaxis) to something? --- For example, a reaction for which you were treated with epinephrine or EpiPen®, or for which you had to go to the hospital? If yes, please list the allergen if known and the allergic reaction.',
         type: 'text',
     },
     {
         question:
-            'Do you currently or have you in the past 14 days, had a fever, chills, cough, shortness of breath, difficulty breathing, fatigue, muscle or body aches, headache, new loss of taste or smell, sore throat, nausea, vomiting or diarrhea?',
+            'Was the severe allergic reaction after receiving a COVID-19 vaccine?',
+        type: 'text',
+        dependency: 1,
+    },
+    {
+        question:
+            'Was the severe allergic reaction after receiving another vaccine or another injectable medication?',
+        type: 'text',
+        dependency: 1,
+    },
+    {
+        question:
+            'Have you received passive antibody therapy (monoclonal antibodies or convalescent serum) as treatment for COVID-19?',
         type: 'text',
     },
     {
         question:
-            'Are you sick today? (For example: a cold, fever, or acute illness)',
+            'Have you received another vaccine in the last 14 days?',
         type: 'text',
     },
     {
         question:
-            'Do you have allergies or reactions to any foods, medications, vaccines or latex? (For example: eggs, gelatin, neomycin, thimerosal, etc.)',
+            'Have you had a positive test for COVID-19 or has a doctor ever told you that you had COVID-19?',
         type: 'text',
     },
     {
         question:
-            'Have you had a seizure or a brain or other nervous system problem or Guillain Barre?',
+            'Do you have a weakened immune system caused by something such as HIV infection or cancer or do you take immunosuppressive drugs or therapies?',
         type: 'text',
     },
     {
         question:
-            'Do you take anticoagulation medication? For example: warfarin, Coumadin or other blood thinner',
+            'Do you have a bleeding disorder or are you taking a blood thinner?',
         type: 'text',
     },
     {
         question:
-            'Do you have a long-term health problem such as heart disease, lung disease, liver disease, asthma or any other immune system problem?',
-        type: 'text',
-    },
-    {
-        question:
-            'Do you have a weakened immune system or in past 3 months, take medications that weaken it such as cortisone, prednisone, other steroids, anticancer drugs, or radiation treatments?',
-        type: 'text',
-    },
-    {
-        question:
-            'Has the person receiving shots received a transfusion of blood or blood products, been given a medicine called immune (gamma) globulin in the past year, taken an anti-viral drug, received monoclonal antibodies or convalescent plasma as part of COVID-19 treatment?',
-        type: 'text',
-    },
-    {
-        question:
-            'For women: are you pregnant or is there a chance you could become pregnant during the next month?',
-        type: 'text',
-    },
-    {
-        question:
-            'Have your received any vaccinations or TB skin test in the past 4 weeks?',
+            'Are you pregnant or breastfeeding?',
         type: 'text',
     },
 ];
+
+export const prettyStatuses = {
+    AwaitingApproval: 'Awaiting Approval',
+    Scheduling: 'Scheduling',
+    Rejected: 'Rejected',
+    Scheduled: 'Scheduled',
+    InformationNeeded: 'Information Needed',
+    Vaccinated: 'Vaccinated',
+};

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ApplicationListItem } from '../lib/types';
+import { ApplicationListItem, ApplicationStatus } from '../lib/types';
 import { ColumnsType } from 'antd/es/table';
 import dayjs, { Dayjs } from 'dayjs';
 import { Button, Card, Col, Form, Input, Row, Select, Table, Typography } from 'antd';
@@ -7,6 +7,7 @@ import { AppFilters, useApplicationList } from '../lib/data/use-application';
 import { Link } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
 import { DatePicker } from '../components/dayjs';
+import {prettyStatuses} from '../lib/static-lists';
 
 const ApplicationList = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -136,7 +137,7 @@ const ApplicationList = () => {
 
             <Table
                 columns={columns}
-                dataSource={applicationList?.items}
+                dataSource={applicationList?.items.map(item => ({...item, status: (prettyStatuses[item.status] || item.status) as ApplicationStatus}))}
                 pagination={{
                     pageSize: 10,
                     current: currentPage,
