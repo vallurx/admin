@@ -45,10 +45,10 @@ const Login = () => {
         }
     };
 
-    const finishLogin = async (data: { otp_code: number }) => {
+    const finishLogin = async (data: { otp_code: string }) => {
         try {
             await axios.post('/api/user/finish_login', {
-                otp_code: data.otp_code,
+                otp_code: data.otp_code.trim(),
                 session_id: req2FA
             });
 

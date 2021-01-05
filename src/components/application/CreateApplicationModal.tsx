@@ -75,9 +75,9 @@ const CreateApplicationModal = (props: CreateApplicationModalProps) => {
                         <Row gutter={8}>
                             <Col span={16}>
                                 <Form.Item name={`screening_question_${i}`} label={screeningQuestions[i].question} shouldUpdate={true} rules={[{required: true, message: 'Required'}]}>
-                                    <Radio.Group>
-                                        <Radio value={true}>Yes</Radio>
-                                        <Radio value={false}>No</Radio>
+                                    <Radio.Group size="large" buttonStyle="solid">
+                                        <Radio.Button value={true}>Yes</Radio.Button>
+                                        <Radio.Button value={false}>No</Radio.Button>
                                     </Radio.Group>
                                 </Form.Item>
                             </Col>
