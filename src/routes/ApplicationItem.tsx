@@ -75,6 +75,7 @@ const ApplicationItem = () => {
                 anatomical_site: data.anatomical_site,
                 dose_size: data.dose_size,
                 expiration_date: data.expiration_date,
+                lot_number: data.lot_number,
                 notes: data.notes,
                 has_nurse_sig_image: true
             }
