@@ -201,7 +201,7 @@ const ApplicationItem = () => {
                 </Button>
             </Space>
 
-            {application.status === 'AwaitingApproval' && (
+            {(application.status === 'AwaitingApproval' || application.status === 'Scheduling' || application.status === 'InformationNeeded' || application.status === 'Rejected') && (
                 <>
                     <Divider>Review</Divider>
 
