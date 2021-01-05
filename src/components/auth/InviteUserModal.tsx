@@ -28,12 +28,15 @@ const InviteUserModal = (props: InviteUserModalProps) => {
                 description: 'You have successfully invited a user. Please ask them to check their email for further instructions.'
             });
 
+            form.resetFields();
             onFinish();
         } catch (e) {
             notification.error({
                 message: 'Uh oh!',
                 description: 'There was an error inviting a user.'
             });
+        } finally {
+            setLoading(false);
         }
     };
 
